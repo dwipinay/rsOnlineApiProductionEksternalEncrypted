@@ -1,0 +1,16 @@
+### Token Create
+POST http://127.0.0.1:3020/api/login
+Content-Type: application/json
+
+{
+    "email": "cumadwip@gmail.com",
+    "password": "dwipinay"
+}
+
+### Display all rumah sakit resource
+GET http://localhost:3020/api/rumahsakit?nama=si
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImN1bWFkd2lwQGdtYWlsLmNvbSIsImlhdCI6MTYzNjM3NjczOCwiZXhwIjoxNjM2Mzc3MzM4fQ.Mw444LfMFlWvpCHHdb5qYSl1HsYtAPuT9toZVEzd5k0
+
+### Display the specific rumah sakit resource
+GET http://localhost:3020/api/rumahsakit/1108017
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImN1bWFkd2lwQGdtYWlsLmNvbSIsImlhdCI6MTYzNzI4ODkyMywiZXhwIjoxNjM3Mjg5NTIzfQ.iB_rfRHDek5LFH9O1IjlQyie23KeS4TZ0TAWRCt48P0

@@ -1,0 +1,751 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "RS Online API",
+        "description": "Daftar API RS Online",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3010",
+            "description": "staging server"
+        }
+    ],
+    "tags": [
+        {
+            "name": "rslogin",
+            "description": ""
+        },
+        {
+            "name": "kematian",
+            "description": ""
+        },
+        {
+            "name": "lokasikematian",
+            "description": "master data"
+        },
+        {
+            "name": "penyebabkematianlangsung",
+            "description": "master data"
+        },
+        {
+            "name": "kasuskematian",
+            "description": "master data"
+        },
+        {
+            "name": "komorbid",
+            "description": "master data"
+        },
+        {
+            "name": "provinsi",
+            "description": "reference data"
+        },
+        {
+            "name": "kabkota",
+            "description": "reference data"
+        },
+        {
+            "name": "kecamatan",
+            "description": "reference data"
+        },
+        {
+            "name": "kelurahan",
+            "description": "reference data"
+        }
+    ],
+    "paths": {
+        "/api/rslogin": {
+            "post":{
+                "tags":[
+                    "rslogin"
+                ],
+                "summary": "",
+                "description":"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "kode_rs": "1",
+                                    "password": "1"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "201": {
+                        "description": "created"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/kematian": {
+            "post":{
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags":[
+                    "kematian"
+                ],
+                "summary": "",
+                "description":"Create",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "nik": "1 atau null",
+                                    "nama": "Fulan",
+                                    "jenis_kelamin": "L=Laki-laki, P=Perempuan",
+                                    "tanggal_lahir": "1990-01-01",
+                                    "ktp_alamat": "Jl.",
+                                    "ktp_kelurahan_id": "3207102003 (referensi kode KemDagri)",
+                                    "ktp_kecamatan_id": "320710 (referensi kode KemDagri)",
+                                    "ktp_kab_kota_id": "3207 (referensi kode KemDagri)",
+                                    "ktp_provinsi_id": "32 (referensi kode KemDagri)",
+                                    "domisili_alamat": "Jl.",
+                                    "tanggal_masuk": "2000-01-01",
+                                    "saturasi_oksigen": 95,
+                                    "tanggal_kematian": "2000-01-01",
+                                    "lokasi_kematian_id": 1,
+                                    "penyebab_kematian_langsung_id": "J80 (referensi kode ICD-10 terpilih)",
+                                    "kasus_kematian_id": "B34.2 = Konfirmasi, Z09 = Probable",
+                                    "status_komorbid": "0=tidak, 1=ya",
+                                    "komorbid_1_id": "A15 (referensi kode ICD-10 terpilih)",
+                                    "komorbid_2_id": null,
+                                    "komorbid_3_id": null,
+                                    "komorbid_4_id": null,
+                                    "status_kehamilan": "0=tidak, 1=ya"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "201": {
+                        "description": "created"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            },
+            "get":{
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags":[
+                    "kematian"
+                ],
+                "summary": "",
+                "description":"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        },
+                        "description": ""
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1000"
+                        },
+                        "description": ""
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "data found"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    },
+                    "403": {
+                        "description": "forbidden"
+                    }
+                }
+            }
+        },
+        "/api/kematian/{id}": {
+            "patch":{
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags":[
+                    "kematian"
+                ],
+                "summary": "",
+                "description":"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": 1
+                        },
+                        "description": ""
+                    }
+                ],
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "tanggal_masuk": "2000-01-01",
+                                    "saturasi_oksigen": 95,
+                                    "tanggal_kematian": "2000-01-01",
+                                    "lokasi_kematian_id": 1,
+                                    "penyebab_kematian_langsung_id": "J80",
+                                    "kasus_kematian_id": "B34.2 = Konfirmasi, Z09 = Probable",
+                                    "status_komorbid": "0=tidak, 1=ya",
+                                    "komorbid_1_id": "A15",
+                                    "komorbid_2_id": null,
+                                    "komorbid_3_id": null,
+                                    "komorbid_4_id": null
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200": {
+                        "description": "updated"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    },
+                    "403": {
+                        "description": "forbidden"
+                    }
+                }
+            },
+            "delete":{
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags":[
+                    "kematian"
+                ],
+                "summary": "",
+                "description":"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": 1
+                        },
+                        "description": ""
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "deleted"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    },
+                    "403": {
+                        "description": "forbidden"
+                    }
+                }
+            }
+        },
+        "/api/lokasikematian":{
+            "get":{
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags":[
+                    "lokasikematian"
+                ],
+                "summary": "",
+                "description":"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        },
+                        "description": ""
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1000"
+                        },
+                        "description": ""
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "data found"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    },
+                    "403": {
+                        "description": "forbidden"
+                    }
+                }
+            }
+        },
+        "/api/penyebabkematianlangsung":{
+            "get":{
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags":[
+                    "penyebabkematianlangsung"
+                ],
+                "summary": "",
+                "description":"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        },
+                        "description": ""
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1000"
+                        },
+                        "description": ""
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "data found"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    },
+                    "403": {
+                        "description": "forbidden"
+                    }
+                }
+            }
+        },
+        "/api/kasuskematian":{
+            "get":{
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags":[
+                    "kasuskematian"
+                ],
+                "summary": "",
+                "description":"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        },
+                        "description": ""
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1000"
+                        },
+                        "description": ""
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "data found"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    },
+                    "403": {
+                        "description": "forbidden"
+                    }
+                }
+            }
+        },
+        "/api/komorbid":{
+            "get":{
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags":[
+                    "komorbid"
+                ],
+                "summary": "",
+                "description":"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        },
+                        "description": ""
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1000"
+                        },
+                        "description": ""
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "data found"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    },
+                    "403": {
+                        "description": "forbidden"
+                    }
+                }
+            }
+        },
+        "/api/provinsi":{
+            "get":{
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags":[
+                    "provinsi"
+                ],
+                "summary": "",
+                "description":"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        },
+                        "description": ""
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1000"
+                        },
+                        "description": ""
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "data found"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    },
+                    "403": {
+                        "description": "forbidden"
+                    }
+                }
+            }
+        },
+        "/api/kabkota":{
+            "get":{
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags":[
+                    "kabkota"
+                ],
+                "summary": "",
+                "description":"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        },
+                        "description": ""
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1000"
+                        },
+                        "description": ""
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "data found"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    },
+                    "403": {
+                        "description": "forbidden"
+                    }
+                }
+            }
+        },
+        "/api/kecamatan":{
+            "get":{
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags":[
+                    "kecamatan"
+                ],
+                "summary": "",
+                "description":"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        },
+                        "description": ""
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1000"
+                        },
+                        "description": ""
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "data found"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    },
+                    "403": {
+                        "description": "forbidden"
+                    }
+                }
+            }
+        },
+        "/api/kelurahan":{
+            "get":{
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags":[
+                    "kelurahan"
+                ],
+                "summary": "",
+                "description":"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1"
+                        },
+                        "description": ""
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": "1000"
+                        },
+                        "description": ""
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "data found"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    },
+                    "403": {
+                        "description": "forbidden"
+                    }
+                }
+            }
+        }
+    },
+    "components": {        
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
