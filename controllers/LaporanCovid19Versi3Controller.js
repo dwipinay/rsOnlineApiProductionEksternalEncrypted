@@ -354,26 +354,6 @@ class LaporanCovid19Versi3Controller {
         }
         
         const laporanCovid19Versi3Object = new laporanCovid19Versi3()
-        // laporanCovid19Versi3Object.insertData(data, (err, result) => {
-        //     if (err) {
-        //         res.status(422).send({
-        //             status: false,
-        //             message: err.sqlMessage
-        //         })
-        //         return
-        //     } else if (result == 1) {
-        //         res.status(422).send({
-        //             status: false,
-        //             message: "Pasien dengan NIK tersebut masih dalam perawatan"
-        //         })
-        //         return
-        //     }
-        //     res.status(201).send({
-        //         status: true,
-        //         message: "data inserted successfully",
-        //         data: result
-        //     })
-        // })
         laporanCovid19Versi3Object.insertDataEncripted(data, (err, result) => {
             if (err) {
                 res.status(422).send({

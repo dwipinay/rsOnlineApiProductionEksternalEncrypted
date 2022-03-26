@@ -9,5 +9,5 @@ app.use(cors())
 app.use(apiRouter)
 app.use(docRouter)
 
-const port = process.env.PORT || 3030
+const port = process.env.PORT || 3020
 app.listen(port, () => console.log(`listening on port ${port}`))

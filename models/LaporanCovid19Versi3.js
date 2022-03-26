@@ -320,6 +320,20 @@ class LaporanCovid19Versi3 {
         )
     }
 
+    insertData(data, callback) {
+        this.getVaksinData(data.nik)
+        .then(
+            (resVaksin) => {
+                console.log(resVaksin.data)
+                callback(null, 'hello')
+            }
+        )
+        .catch((error) => {
+            console.log(error)
+            callback(error, null)
+        })
+    }
+
     insertDataEncripted(data, callback) {
         const database = new Database(pool)
         // Searching NIK in NAR API
@@ -584,26 +598,71 @@ class LaporanCovid19Versi3 {
                                                     this.getVaksinData(data.nik)
                                                     .then(
                                                         (resVaksinData) => {
-                                                            // let arrData = []
-                                                            // let vaksinKe = null
-                                                            // resVaksinData.data.data.vaccinations.forEach(element => {
-                                                            //     if (element['type'] == 'first') {
-                                                            //         vaksinKe = 1
-                                                            //     } else if (element['type'] == 'second') {
-                                                            //         vaksinKe = 2
-                                                            //     } else if (element['type'] == 'third') {
-                                                            //         vaksinKe = 3
-                                                            //     }
-                                                            //     arrData.push({
-                                                            //         nik: args,
-                                                            //         tanggal: dateFormat(element['date'], 'yyyy-mm-dd'),
-                                                            //         vaksinKe: vaksinKe,
-                                                            //         type: element['type'],
-                                                            //         vaccine_type: element['vaccine_type'],
-                                                            //         vaccine_type_name: element['vaccine_type_name']
-                                                            //     })
-                                                            // })
-                                                            console.log(resVaksinData)
+                                                            // if data vaksin was founded
+                                                            // ########################################################################
+                                                            if(resVaksinData.data.message == 'data found') {
+                                                                // Preparing delete command for vaksin
+                                                                // ##########################################################################
+                                                                const sqlDeleteVaksin = 'DELETE FROM covid.t_api_vaksin_dto ' +
+                                                                    'WHERE covid.t_api_vaksin_dto.nik_encrypt = ? '
+                                                                // Deleting Vaksin
+                                                                database.query(sqlDeleteVaksin, [resCipertext[0].data.result])
+                                                                .then(
+                                                                    (resDeleteVaksin) => {
+                                                                        // Assigning vaksin variable
+                                                                        // ####################################################################
+                                                                        let vaksinData = []
+                                                                        let vaksinKe = null
+                                                                        resVaksinData.data.data.forEach(element => {
+                                                                            if (element['type'] == 'first') {
+                                                                                vaksinKe = 1
+                                                                            } else if (element['type'] == 'second') {
+                                                                                vaksinKe = 2
+                                                                            } else if (element['type'] == 'third') {
+                                                                                vaksinKe = 3
+                                                                            }
+                                                                            vaksinData.push([
+                                                                                data.nik,
+                                                                                dateFormat(element['date'], 'yyyy-mm-dd'),
+                                                                                vaksinKe,
+                                                                                element['vaccine_type'],
+                                                                                element['vaccine_type_name'],
+                                                                                resCipertext[0].data.result
+                                                                            ])
+                                                                        })
+                                                                        // Preparing insert command for vaksin
+                                                                        // ###############################################################
+                                                                        const sqlInsertVaksin = 'INSERT INTO covid.t_api_vaksin_dto ' +
+                                                                            '( ' +
+                                                                                'nik,' +
+                                                                                'tglvaksin,' +
+                                                                                'vaksin_ke,' +
+                                                                                'tipe_vaksin,' +
+                                                                                'nama_vaksin,' +
+                                                                                'nik_encrypt' +
+                                                                            ') ' +
+                                                                        'VALUES ? '
+                                                                        // Inserting Vaksin Data to DB
+                                                                        // ################################################################
+                                                                        database.query(sqlInsertVaksin,[vaksinData])
+                                                                        .then(
+                                                                            (resInsertVaksin) => {
+                                                                                dataInserted = {
+                                                                                    id: resInsert.insertId
+                                                                                }
+                                                                                callback(null, dataInserted)
+                                                                            }
+                                                                        )
+                                                                        .catch((error) => {
+                                                                            callback(error, null)
+                                                                        })
+                                                                    }
+                                                                )
+                                                                .catch((error) => {
+                                                                    callback(error, null)
+                                                                })
+                                                                return
+                                                            }
                                                             dataInserted = {
                                                                 id: resInsert.insertId
                                                             }
@@ -1031,55 +1090,18 @@ class LaporanCovid19Versi3 {
         })
     }
 
-    getToken() {
-        const endPoint = 'https://api-satu-data.dto.kemkes.go.id/v1/auth/authenticate'
-        const config = {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }
-        const body = {
-            "username": "yankes",
-            "public_key": "MIGJAoGBALREFpvGZXUvzsogEUgu/3qZuEEBGYaMBoD0rVvTfhrtjsokC1/Idx4FUdPn67PBD4NL7eLVtBvs9mxUSrOqo1y4buLwPB64PA0Nfw9Sv+s0UvJFQ0F2VJT+gvT1aACthisSHn2NZzx2G5xcEq55ZdynAs3odJxs9fh/qQqek0gNAgMBAAE="
-        }
-        return new Promise((resolve, reject) => {
-            axios.post(endPoint, body, config) 
-            .then(
-                (res) => {
-                    resolve(res)
-                }
-            )
-            .catch((error) => {
-                reject(error)
-            })
-        })
-    }
-
     getVaksinData(args) {
         return new Promise((resolve, reject) => {
-            this.getToken()
+            const endPoint = 'http://202.70.136.86:3030/api/vaksin'
+            const config = {
+                params: {
+                    nik: args
+                }
+            }
+            axios.get(endPoint, config)
             .then(
-                (resToken) => {
-                    if(resToken.data.status_code == 200) {
-                        const endPoint = 'https://api-satu-data.dto.kemkes.go.id/v1/yankes/vaksin'
-                        const config = {
-                            headers: {
-                                'Authorization': resToken.data.data.access_token
-                            },
-                            params: {
-                                nik: args
-                            }
-                        }
-                        axios.get(endPoint, config)
-                        .then(
-                            (resVaksin) => {
-                                resolve(resVaksin)
-                            }
-                        )
-                        .catch((error) => {
-                            reject(error)
-                        })
-                    }
+                (resVaksin) => {
+                    resolve(resVaksin)
                 }
             )
             .catch((error) => {
