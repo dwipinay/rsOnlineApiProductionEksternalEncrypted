@@ -8,64 +8,64 @@ class LaporanCovid19Versi3 {
     getData(req, callback) {
         const database = new Database(pool)
         const sqlSelect = 'SELECT ' +
-            'covid.covid_v3_encrypted.id_trans,' +
-            'covid.covid_v3_encrypted.nik,' +
-            'covid.covid_v3_encrypted.nomr as no_rm,' +
-            'covid.covid_v3_encrypted.initial as nama_inisial,' +
-            'covid.covid_v3_encrypted.nama_lengkap as nama_lengkap,' +
-            'covid.covid_v3_encrypted.gender as jenis_kelamin_id,' +
+            'covid.covid_v3.id_trans,' +
+            'covid.covid_v3.nik,' +
+            'covid.covid_v3.nomr as no_rm,' +
+            'covid.covid_v3.initial as nama_inisial,' +
+            'covid.covid_v3.nama_lengkap as nama_lengkap,' +
+            'covid.covid_v3.gender as jenis_kelamin_id,' +
             'CASE ' +
-                'WHEN covid.covid_v3_encrypted.gender = "L" THEN "Laki-Laki"' +
-                'WHEN covid.covid_v3_encrypted.gender = "P" THEN "Perempuan"' +
+                'WHEN covid.covid_v3.gender = "L" THEN "Laki-Laki"' +
+                'WHEN covid.covid_v3.gender = "P" THEN "Perempuan"' +
                 'ELSE "Lainnya"' +
             'END as jenis_kelamin_nama,' +
-            'covid.covid_v3_encrypted.birthdate as tanggal_lahir,' +
+            'covid.covid_v3.birthdate as tanggal_lahir,' +
             'covid.kelompokumur.kelompok_umur as kelompok_umur,' +
-            'covid.covid_v3_encrypted.kecamatan as domisili_kecamatan_id,' +
+            'covid.covid_v3.kecamatan as domisili_kecamatan_id,' +
             'reference.kecamatan.nama as domisili_kecamatan_nama,' +
             'reference.kab_kota.id as domisili_kab_kota_id,' +
             'reference.kab_kota.nama as domisili_kab_kota_nama,' +
             'reference.provinsi.id as domisili_provinsi_id,' +
             'reference.provinsi.nama as domisili_provinsi_nama,' +
-            'covid.covid_v3_encrypted.tglmasuk as tanggal_masuk,' +
-            'covid.covid_v3_encrypted.profesi as pekerjaan_id,' +
+            'covid.covid_v3.tglmasuk as tanggal_masuk,' +
+            'covid.covid_v3.profesi as pekerjaan_id,' +
             'covid.profesi.deskripsi as pekerjaan_nama,' +
-            'covid.covid_v3_encrypted.jenis_pasien as jenis_pasien_id,' +
+            'covid.covid_v3.jenis_pasien as jenis_pasien_id,' +
             'covid.jenis_pasien.deskripsi as jenis_pasien_nama,' +
-            'covid.covid_v3_encrypted.status_rawat as status_pasien_id,' +
+            'covid.covid_v3.status_rawat as status_pasien_id,' +
             'covid.status_rawat_kmk.status as status_pasien_nama ,' +
             'CASE ' +
-                'WHEN covid.covid_v3_encrypted.komorbid = "0" THEN "tidak"' +
-                'WHEN covid.covid_v3_encrypted.komorbid = "1" THEN "ya"' +
+                'WHEN covid.covid_v3.komorbid = "0" THEN "tidak"' +
+                'WHEN covid.covid_v3.komorbid = "1" THEN "ya"' +
                 'ELSE "null"' +
             'END as status_komorbid_nama,' +
-            'covid.covid_v3_encrypted.coinsiden as status_coinsiden_id,' +
+            'covid.covid_v3.coinsiden as status_coinsiden_id,' +
             'CASE ' +
-                'WHEN covid.covid_v3_encrypted.coinsiden = "0" THEN "tidak"' +
-                'WHEN covid.covid_v3_encrypted.coinsiden = "1" THEN "ya"' +
+                'WHEN covid.covid_v3.coinsiden = "0" THEN "tidak"' +
+                'WHEN covid.covid_v3.coinsiden = "1" THEN "ya"' +
                 'ELSE "null"' +
             'END as status_coinsiden_nama,' +
-            'covid.covid_v3_encrypted.status_isolasi as status_rawat_id,' +
+            'covid.covid_v3.status_isolasi as status_rawat_id,' +
             'db_fasyankes.m_tempat_tidur.tt as status_rawat_nama,' +
-            'covid.covid_v3_encrypted.saturasi as saturasi_oksigen,' +
-            'covid.covid_v3_encrypted.oksigen as terapi_oksigen_id,' +
+            'covid.covid_v3.saturasi as saturasi_oksigen,' +
+            'covid.covid_v3.oksigen as terapi_oksigen_id,' +
             'CASE ' +
-                'WHEN covid.covid_v3_encrypted.oksigen = "0" THEN "tidak"' +
-                'WHEN covid.covid_v3_encrypted.oksigen = "1" THEN "ya"' +
+                'WHEN covid.covid_v3.oksigen = "0" THEN "tidak"' +
+                'WHEN covid.covid_v3.oksigen = "1" THEN "ya"' +
                 'ELSE "null"' +
             'END as terapi_oksigen_nama,' +
-            'covid.covid_v3_encrypted.tgl_lapor as tanggal_lapor '
+            'covid.covid_v3.tgl_lapor as tanggal_lapor '
 
         const sqlFrom = 'FROM ' +
-            'covid.covid_v3_encrypted ' +
-            'LEFT OUTER JOIN covid.kelompokumur ON covid.kelompokumur.id_umur = covid.covid_v3_encrypted.age ' +
-            'LEFT OUTER JOIN reference.kecamatan ON reference.kecamatan.id = covid.covid_v3_encrypted.kecamatan ' +
+            'covid.covid_v3 ' +
+            'LEFT OUTER JOIN covid.kelompokumur ON covid.kelompokumur.id_umur = covid.covid_v3.age ' +
+            'LEFT OUTER JOIN reference.kecamatan ON reference.kecamatan.id = covid.covid_v3.kecamatan ' +
             'LEFT OUTER JOIN reference.kab_kota ON reference.kab_kota.id = reference.kecamatan.kab_kota_id ' +
             'LEFT OUTER JOIN reference.provinsi ON reference.provinsi.id = reference.kab_kota.provinsi_id ' +
-            'LEFT OUTER JOIN covid.profesi ON covid.profesi.id_profesi = covid.covid_v3_encrypted.profesi ' +
-            'LEFT OUTER JOIN covid.jenis_pasien ON covid.jenis_pasien.id_jenis_pasien = covid.covid_v3_encrypted.jenis_pasien ' +
-            'LEFT OUTER JOIN covid.status_rawat_kmk ON covid.status_rawat_kmk.id_status_rawat = covid.covid_v3_encrypted.status_rawat ' +
-            'LEFT OUTER JOIN db_fasyankes.m_tempat_tidur ON db_fasyankes.m_tempat_tidur.id_tt = covid.covid_v3_encrypted.status_isolasi ' 
+            'LEFT OUTER JOIN covid.profesi ON covid.profesi.id_profesi = covid.covid_v3.profesi ' +
+            'LEFT OUTER JOIN covid.jenis_pasien ON covid.jenis_pasien.id_jenis_pasien = covid.covid_v3.jenis_pasien ' +
+            'LEFT OUTER JOIN covid.status_rawat_kmk ON covid.status_rawat_kmk.id_status_rawat = covid.covid_v3.status_rawat ' +
+            'LEFT OUTER JOIN db_fasyankes.m_tempat_tidur ON db_fasyankes.m_tempat_tidur.id_tt = covid.covid_v3.status_isolasi ' 
 
         const sqlFilterValue = [
             req.user.kode_rs
@@ -74,13 +74,13 @@ class LaporanCovid19Versi3 {
         const sqlWhere = 'WHERE '
 
         const filter = [
-            'covid.covid_v3_encrypted.tglkeluar = "0000-00-00"',
-            'covid.covid_v3_encrypted.koders = ?'
+            'covid.covid_v3.tglkeluar = "0000-00-00"',
+            'covid.covid_v3.koders = ?'
         ]
 
         const noRM = req.query.noRM || null
         if (noRM != null) {
-            filter.push('covid.covid_v3_encrypted.nomr = ?')
+            filter.push('covid.covid_v3.nomr = ?')
             sqlFilterValue.push(noRM)
         }
 
@@ -177,64 +177,64 @@ class LaporanCovid19Versi3 {
     show(user, id, callback) {
         const database = new Database(pool)
         const sql = 'SELECT ' +
-            'covid.covid_v3_encrypted.id_trans,' +
-            'covid.covid_v3_encrypted.nik,' +
-            'covid.covid_v3_encrypted.nomr as no_rm,' +
-            'covid.covid_v3_encrypted.initial as nama_inisial,' +
-            'covid.covid_v3_encrypted.nama_lengkap as nama_lengkap,' +
-            'covid.covid_v3_encrypted.gender as jenis_kelamin_id,' +
+            'covid.covid_v3.id_trans,' +
+            'covid.covid_v3.nik,' +
+            'covid.covid_v3.nomr as no_rm,' +
+            'covid.covid_v3.initial as nama_inisial,' +
+            'covid.covid_v3.nama_lengkap as nama_lengkap,' +
+            'covid.covid_v3.gender as jenis_kelamin_id,' +
             'CASE ' +
-                'WHEN covid.covid_v3_encrypted.gender = "L" THEN "Laki-Laki"' +
-                'WHEN covid.covid_v3_encrypted.gender = "P" THEN "Perempuan"' +
+                'WHEN covid.covid_v3.gender = "L" THEN "Laki-Laki"' +
+                'WHEN covid.covid_v3.gender = "P" THEN "Perempuan"' +
                 'ELSE "Lainnya"' +
             'END as jenis_kelamin_nama,' +
-            'covid.covid_v3_encrypted.birthdate as tanggal_lahir,' +
+            'covid.covid_v3.birthdate as tanggal_lahir,' +
             'covid.kelompokumur.kelompok_umur as kelompok_umur,' +
-            'covid.covid_v3_encrypted.kecamatan as domisili_kecamatan_id,' +
+            'covid.covid_v3.kecamatan as domisili_kecamatan_id,' +
             'reference.kecamatan.nama as domisili_kecamatan_nama,' +
             'reference.kab_kota.id as domisili_kab_kota_id,' +
             'reference.kab_kota.nama as domisili_kab_kota_nama,' +
             'reference.provinsi.id as domisili_provinsi_id,' +
             'reference.provinsi.nama as domisili_provinsi_nama,' +
-            'covid.covid_v3_encrypted.tglmasuk as tanggal_masuk,' +
-            'covid.covid_v3_encrypted.profesi as pekerjaan_id,' +
+            'covid.covid_v3.tglmasuk as tanggal_masuk,' +
+            'covid.covid_v3.profesi as pekerjaan_id,' +
             'covid.profesi.deskripsi as pekerjaan_nama,' +
-            'covid.covid_v3_encrypted.jenis_pasien as jenis_pasien_id,' +
+            'covid.covid_v3.jenis_pasien as jenis_pasien_id,' +
             'covid.jenis_pasien.deskripsi as jenis_pasien_nama,' +
-            'covid.covid_v3_encrypted.status_rawat as status_pasien_id,' +
+            'covid.covid_v3.status_rawat as status_pasien_id,' +
             'covid.status_rawat_kmk.status as status_pasien_nama ,' +
             'CASE ' +
-                'WHEN covid.covid_v3_encrypted.komorbid = "0" THEN "tidak"' +
-                'WHEN covid.covid_v3_encrypted.komorbid = "1" THEN "ya"' +
+                'WHEN covid.covid_v3.komorbid = "0" THEN "tidak"' +
+                'WHEN covid.covid_v3.komorbid = "1" THEN "ya"' +
                 'ELSE "null"' +
             'END as status_komorbid_nama,' +
-            'covid.covid_v3_encrypted.coinsiden as status_coinsiden_id,' +
+            'covid.covid_v3.coinsiden as status_coinsiden_id,' +
             'CASE ' +
-                'WHEN covid.covid_v3_encrypted.coinsiden = "0" THEN "tidak"' +
-                'WHEN covid.covid_v3_encrypted.coinsiden = "1" THEN "ya"' +
+                'WHEN covid.covid_v3.coinsiden = "0" THEN "tidak"' +
+                'WHEN covid.covid_v3.coinsiden = "1" THEN "ya"' +
                 'ELSE "null"' +
             'END as status_coinsiden_nama,' +
-            'covid.covid_v3_encrypted.status_isolasi as status_rawat_id,' +
+            'covid.covid_v3.status_isolasi as status_rawat_id,' +
             'db_fasyankes.m_tempat_tidur.tt as status_rawat_nama,' +
-            'covid.covid_v3_encrypted.saturasi as saturasi_oksigen,' +
-            'covid.covid_v3_encrypted.oksigen as terapi_oksigen_id,' +
+            'covid.covid_v3.saturasi as saturasi_oksigen,' +
+            'covid.covid_v3.oksigen as terapi_oksigen_id,' +
             'CASE ' +
-                'WHEN covid.covid_v3_encrypted.oksigen = "0" THEN "tidak"' +
-                'WHEN covid.covid_v3_encrypted.oksigen = "1" THEN "ya"' +
+                'WHEN covid.covid_v3.oksigen = "0" THEN "tidak"' +
+                'WHEN covid.covid_v3.oksigen = "1" THEN "ya"' +
                 'ELSE "null"' +
             'END as terapi_oksigen_nama,' +
-            'covid.covid_v3_encrypted.tgl_lapor as tanggal_lapor ' +
+            'covid.covid_v3.tgl_lapor as tanggal_lapor ' +
         'FROM ' +
-            'covid.covid_v3_encrypted ' +
-            'LEFT OUTER JOIN covid.kelompokumur ON covid.kelompokumur.id_umur = covid.covid_v3_encrypted.age ' +
-            'LEFT OUTER JOIN reference.kecamatan ON reference.kecamatan.id = covid.covid_v3_encrypted.kecamatan ' +
+            'covid.covid_v3 ' +
+            'LEFT OUTER JOIN covid.kelompokumur ON covid.kelompokumur.id_umur = covid.covid_v3.age ' +
+            'LEFT OUTER JOIN reference.kecamatan ON reference.kecamatan.id = covid.covid_v3.kecamatan ' +
             'LEFT OUTER JOIN reference.kab_kota ON reference.kab_kota.id = reference.kecamatan.kab_kota_id ' +
             'LEFT OUTER JOIN reference.provinsi ON reference.provinsi.id = reference.kab_kota.provinsi_id ' +
-            'LEFT OUTER JOIN covid.profesi ON covid.profesi.id_profesi = covid.covid_v3_encrypted.profesi ' +
-            'LEFT OUTER JOIN covid.jenis_pasien ON covid.jenis_pasien.id_jenis_pasien = covid.covid_v3_encrypted.jenis_pasien ' +
-            'LEFT OUTER JOIN covid.status_rawat_kmk ON covid.status_rawat_kmk.id_status_rawat = covid.covid_v3_encrypted.status_rawat ' +
-            'LEFT OUTER JOIN db_fasyankes.m_tempat_tidur ON db_fasyankes.m_tempat_tidur.id_tt = covid.covid_v3_encrypted.status_isolasi ' +
-        'WHERE covid.covid_v3_encrypted.koders = ? and covid.covid_v3_encrypted.id_trans = ? '
+            'LEFT OUTER JOIN covid.profesi ON covid.profesi.id_profesi = covid.covid_v3.profesi ' +
+            'LEFT OUTER JOIN covid.jenis_pasien ON covid.jenis_pasien.id_jenis_pasien = covid.covid_v3.jenis_pasien ' +
+            'LEFT OUTER JOIN covid.status_rawat_kmk ON covid.status_rawat_kmk.id_status_rawat = covid.covid_v3.status_rawat ' +
+            'LEFT OUTER JOIN db_fasyankes.m_tempat_tidur ON db_fasyankes.m_tempat_tidur.id_tt = covid.covid_v3.status_isolasi ' +
+        'WHERE covid.covid_v3.koders = ? and covid.covid_v3.id_trans = ? '
 
         const sqlFilterValue = [
             user.kode_rs,
@@ -320,484 +320,6 @@ class LaporanCovid19Versi3 {
         )
     }
 
-    insertData(data, callback) {
-        // Search inserted NIK
-        const sqlNIKSearch = 'SELECT ' +
-            'covid.covid_v3.id_trans,' +
-            'covid.covid_v3.nik ' +
-        'FROM covid.covid_v3 ' +
-        'WHERE covid.covid_v3.koders = ? AND covid.covid_v3.nik = ? AND covid.covid_v3.tglkeluar = "0000-00-00"'
-        
-        const sqlFilterValue = [
-            data.kodeRS,
-            data.nik
-        ]
-
-        const database = new Database(pool)
-        database.query(sqlNIKSearch, sqlFilterValue)
-        .then(
-            (resNIKSearch) => {
-                if (resNIKSearch.length > 0) {
-                    callback(null, 1)
-                } else {
-                    const endPoint = 'https://ws-direktori.kemkes.go.id/sampel_yankes/1/covid_api/api/sampel_feed/nik_yankes'
-
-                    const config = {
-                        headers: {
-                            'apikey': 'eyJ4NXQiOiJOVGRtWmpNNFpEazNOalkwWXpjNU1tWm1PRGd3TVRFM01XWXdOREU1TVdSbFpEZzROemM0WkE9PSIsImtpZCI6ImdhdGV3YXlfY2VydGlmaWNhdGVfYWxpYXMiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ1c2VyX3lhbmtlc0BjYXJib24uc3VwZXIiLCJhcHBsaWNhdGlvbiI6eyJvd25lciI6InVzZXJfeWFua2VzIiwidGllclF1b3RhVHlwZSI6bnVsbCwidGllciI6IlVubGltaXRlZCIsIm5hbWUiOiJyc29ubGluZSIsImlkIjo1OCwidXVpZCI6ImQ3OTRkYjkzLWU5Y2EtNDQxZS1hM2QxLTNlNDViMTdjZWZhOCJ9LCJpc3MiOiJodHRwczpcL1wvd3NtLWRpcmVrdG9yaS5rZW1rZXMuZ28uaWQ6NDQzXC9vYXV0aDJcL3Rva2VuIiwidGllckluZm8iOnsiVW5saW1pdGVkIjp7InRpZXJRdW90YVR5cGUiOiJyZXF1ZXN0Q291bnQiLCJncmFwaFFMTWF4Q29tcGxleGl0eSI6MCwiZ3JhcGhRTE1heERlcHRoIjowLCJzdG9wT25RdW90YVJlYWNoIjp0cnVlLCJzcGlrZUFycmVzdExpbWl0IjowLCJzcGlrZUFycmVzdFVuaXQiOm51bGx9fSwia2V5dHlwZSI6IlBST0RVQ1RJT04iLCJwZXJtaXR0ZWRSZWZlcmVyIjoiIiwic3Vic2NyaWJlZEFQSXMiOlt7InN1YnNjcmliZXJUZW5hbnREb21haW4iOiJjYXJib24uc3VwZXIiLCJuYW1lIjoic2FtcGVsX3lhbmtlcyIsImNvbnRleHQiOiJcL3NhbXBlbF95YW5rZXNcLzEiLCJwdWJsaXNoZXIiOiJhZG1pbiIsInZlcnNpb24iOiIxIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9XSwicGVybWl0dGVkSVAiOiIiLCJpYXQiOjE2NDIxNjQ2NDQsImp0aSI6IjFhNDZlYjRlLWU4MTktNGI1Zi05MGM0LTJkYzliNDI3YTJhOCJ9.LoXLXsMXzuV-P5osuCo6q8HiPO42ZNh-v_XB6XNpvLyvmYl2VbOSPJLo8Gycdcu86GLHSO35g4MnNvE8EqejbFmaSnl5e-9IvcYJKexOkGQWvm4MMM355SKD9U05riSa6kjUANV2403SRalYkrUVSq9vR_q-Pv6_HpSmc78Tv7T7WarkEQ7yY7CgycNJO0n5AOBpoJ4yx07VchAB4rZSQyLnVFOEqw4ndWoDJU68-G9J-mgsHFDnZiuyw6MTJ2MZvSOHDGCX6PkFGFygYlCXIFJ3brwtuwWyWzgkueZA9JfPA5eG_os0GfcfvGo4pxx7Do9a2e3qbQUjrC6_fECWRw==',
-                            'Content-Type': 'application/json'
-                        },
-                        httpsAgent: new https.Agent({
-                            rejectUnauthorized: false
-                        })
-                    }
-
-                    const body = {
-                        "name":"yankes",
-                        "pass":"hPkRnUrWtYw3y5A8DaFdJfMhQmSpUsXuZw4z6B9E",
-                        "nik": data.nik,
-                        "jnsid": "1"
-                    }
-
-                    axios.post(endPoint, body, config)
-                    .then(response => {
-                        let record = null
-                        let hasilLab = []
-
-                        if (response.data.result_code == '200') {
-                            record = [
-                                data.kewarganegaraanId,
-                                1,
-                                data.nik,
-                                data.noPassport,
-                                data.asalPasienId,
-                                data.kodeRS,
-                                data.noRM,
-                                response.data.data[0].nama,
-                                data.namaInisialPasien,
-                                response.data.data[0].tgl_lahir,
-                                data.pengelompokanUmur,
-                                data.email,
-                                data.noTelp,
-                                response.data.data[0].jkel,
-                                response.data.data[0].alamat_keckd,
-                                response.data.data[0].alamat_kabkd,
-                                response.data.data[0].alamat_propkd,
-                                data.pekerjaanId,
-                                data.tanggalMasuk,
-                                data.jenisPasienId,
-                                data.varianCovidId,
-                                data.statusRawatId,
-                                data.severityLevelId,
-                                data.statusCoInsidenId,
-                                data.statusIsolasiId,
-                                0,
-                                data.saturasiOksigen,
-                                data.terapiOksigenId,
-                                data.alatOksigenId,
-                                data.ipConsumer,
-                                data.pengelompokanKewarganegaraan,
-                                0,
-                                data.penyintasId,
-                                data.tanggalOnsetGejala,
-                                data.kelompokGejalaId,
-                                data.gejala.demamId,
-                                data.gejala.batukId,
-                                data.gejala.pilekId,
-                                data.gejala.sakitTenggorokanId,
-                                data.gejala.sesakNapasId,
-                                data.gejala.lemasId,
-                                data.gejala.nyeriOtotId,
-                                data.gejala.mualMuntahId,
-                                data.gejala.diareId,
-                                data.gejala.anosmiaId,
-                                data.gejala.napasCepatId,
-                                data.gejala.frekNapas30KaliPerMenitId,
-                                data.gejala.distresPernapasanBeratId,
-                                data.gejala.lainnyaId,
-                                '0000-00-00',
-                                2
-                            ]
-                            response.data.data.forEach(element => {
-                                hasilLab.push([
-                                    element.faskes_nm,
-                                    element.nm_lab,
-                                    element.tgl_pengambilan,
-                                    element.tgl_hasil,
-                                    element.hsl_lab,
-                                    element.sgtf_tgl_hasil,
-                                    element.sgtf_hasil,
-                                    element.sgtf_created_by,
-                                    element.wgs_tgl_hasil,
-                                    element.wgs_hasil,
-                                    element.wgs_created_by,
-                                    data.nik
-                                ])
-                            });
-                        } else if (response.data.result_code == '404') {
-                            record = [
-                                data.kewarganegaraanId,
-                                1,
-                                data.nik,
-                                data.noPassport,
-                                data.asalPasienId,
-                                data.kodeRS,
-                                data.noRM,
-                                data.namaLengkapPasien,
-                                data.namaInisialPasien,
-                                data.tanggalLahir,
-                                data.pengelompokanUmur,
-                                data.email,
-                                data.noTelp,
-                                data.jenisKelaminId,
-                                data.domisiliKecamatanId,
-                                data.domisiliKabKotaId,
-                                data.domisiliProvinsiId,
-                                data.pekerjaanId,
-                                data.tanggalMasuk,
-                                data.jenisPasienId,
-                                data.varianCovidId,
-                                data.statusRawatId,
-                                data.severityLevelId,
-                                data.statusCoInsidenId,
-                                data.statusIsolasiId,
-                                0,
-                                data.saturasiOksigen,
-                                data.terapiOksigenId,
-                                data.alatOksigenId,
-                                data.ipConsumer,
-                                data.pengelompokanKewarganegaraan,
-                                0,
-                                data.penyintasId,
-                                data.tanggalOnsetGejala,
-                                data.kelompokGejalaId,
-                                data.gejala.demamId,
-                                data.gejala.batukId,
-                                data.gejala.pilekId,
-                                data.gejala.sakitTenggorokanId,
-                                data.gejala.sesakNapasId,
-                                data.gejala.lemasId,
-                                data.gejala.nyeriOtotId,
-                                data.gejala.mualMuntahId,
-                                data.gejala.diareId,
-                                data.gejala.anosmiaId,
-                                data.gejala.napasCepatId,
-                                data.gejala.frekNapas30KaliPerMenitId,
-                                data.gejala.distresPernapasanBeratId,
-                                data.gejala.lainnyaId,
-                                '0000-00-00',
-                                2
-                            ]
-                        }
-                        const sqlInsert = 'INSERT INTO covid.covid_v3 ' +
-                            '( ' +
-                            'kode_negara,' +
-                            'kewarganegaraan, ' +
-                            'nik,' +
-                            'no_identitas_lain,' +
-                            'asalpasien,' +
-                            'koders,' +
-                            'nomr,' +
-                            'nama_lengkap,' +
-                            'initial,' +
-                            'birthdate,' +
-                            'age,' +
-                            'email,' +
-                            'notelp,' +
-                            'gender,' +
-                            'kecamatan,' +
-                            'kabkota,' +
-                            'propinsi,' +
-                            'profesi,' +
-                            'tglmasuk,' +
-                            'jenis_pasien,' +
-                            'varian,' +
-                            'status_rawat,' +
-                            'severity,' +
-                            'coinsiden,' +
-                            'status_isolasi,' +
-                            'saturasi_old,' +
-                            'saturasi,' +
-                            'oksigen,' +
-                            'alatoksigen,' +
-                            'ip_reg,' +
-                            'kwn, ' +
-                            'status_keluar, ' +
-                            'penyintas, ' +
-                            'tglonset, ' +
-                            'gejala, ' +
-                            'gejala_demam, ' +
-                            'gejala_batuk, ' +
-                            'gejala_pilek, ' +
-                            'gejala_sakittenggorokan, ' +
-                            'gejala_sesak, ' +
-                            'gejala_lemas, ' +
-                            'gejala_nyeriotot, ' +
-                            'gejala_mual, ' +
-                            'gejala_diare, ' +
-                            'gejala_anosmia, ' +
-                            'napas_cepat, ' +
-                            'frek_napas, ' +
-                            'distress, ' +
-                            'gejala_lainnya, ' +
-                            'tglkeluar, ' +
-                            'manual ' +
-                            ') ' +
-                        'VALUES ( ? )'
-
-                        let dataInserted = null
-                        database.query(sqlInsert, [record])
-                        .then(
-                            (res) => {
-                                dataInserted = {
-                                    id: res.insertId
-                                }
-
-                                const sqlInsertHasilLab = 'INSERT INTO covid.t_lab_nik_webservice ' +
-                                    '( ' +
-                                    'faskes,' +
-                                    'namalab,' +
-                                    'tglpengambilan,' +
-                                    'tglhasil,' +
-                                    'hasillab,' +
-                                    'sgtf_tgl_hasil,' +
-                                    'sgtf_hasil,' +
-                                    'sgtf_created_by,' +
-                                    'wgs_tgl_hasil,' +
-                                    'wgs_hasil,' +
-                                    'wgs_created_by,' +
-                                    'nik' +
-                                    ') ' +
-                                'VALUES ? '
-
-                                if (response.data.result_code == '200') {
-                                    return database.query(sqlInsertHasilLab,[hasilLab])
-                                }
-                                return
-                            }, (error) => {
-                                throw error
-                            }
-                        )
-                        .then (
-                            (res) => {
-                                callback(null, dataInserted)
-                            }, (error) => {
-                                throw error
-                            }
-                        )
-                        .catch(
-                            (error) => {
-                                callback(error, null)
-                            }
-                        )
-                    })
-                }
-            }, (error) => {
-                throw error
-            }
-        )
-        .catch(error => {
-            // console.log(error)
-            callback(null, error)
-        })
-    }
-
-    updateData(data, id, callback) {
-        const endPoint = 'https://ws-direktori.kemkes.go.id/sampel_yankes/1/covid_api/api/sampel_feed/nik_yankes'
-
-        const config = {
-            headers: {
-                'apikey': 'eyJ4NXQiOiJOVGRtWmpNNFpEazNOalkwWXpjNU1tWm1PRGd3TVRFM01XWXdOREU1TVdSbFpEZzROemM0WkE9PSIsImtpZCI6ImdhdGV3YXlfY2VydGlmaWNhdGVfYWxpYXMiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ1c2VyX3lhbmtlc0BjYXJib24uc3VwZXIiLCJhcHBsaWNhdGlvbiI6eyJvd25lciI6InVzZXJfeWFua2VzIiwidGllclF1b3RhVHlwZSI6bnVsbCwidGllciI6IlVubGltaXRlZCIsIm5hbWUiOiJyc29ubGluZSIsImlkIjo1OCwidXVpZCI6ImQ3OTRkYjkzLWU5Y2EtNDQxZS1hM2QxLTNlNDViMTdjZWZhOCJ9LCJpc3MiOiJodHRwczpcL1wvd3NtLWRpcmVrdG9yaS5rZW1rZXMuZ28uaWQ6NDQzXC9vYXV0aDJcL3Rva2VuIiwidGllckluZm8iOnsiVW5saW1pdGVkIjp7InRpZXJRdW90YVR5cGUiOiJyZXF1ZXN0Q291bnQiLCJncmFwaFFMTWF4Q29tcGxleGl0eSI6MCwiZ3JhcGhRTE1heERlcHRoIjowLCJzdG9wT25RdW90YVJlYWNoIjp0cnVlLCJzcGlrZUFycmVzdExpbWl0IjowLCJzcGlrZUFycmVzdFVuaXQiOm51bGx9fSwia2V5dHlwZSI6IlBST0RVQ1RJT04iLCJwZXJtaXR0ZWRSZWZlcmVyIjoiIiwic3Vic2NyaWJlZEFQSXMiOlt7InN1YnNjcmliZXJUZW5hbnREb21haW4iOiJjYXJib24uc3VwZXIiLCJuYW1lIjoic2FtcGVsX3lhbmtlcyIsImNvbnRleHQiOiJcL3NhbXBlbF95YW5rZXNcLzEiLCJwdWJsaXNoZXIiOiJhZG1pbiIsInZlcnNpb24iOiIxIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9XSwicGVybWl0dGVkSVAiOiIiLCJpYXQiOjE2NDIxNjQ2NDQsImp0aSI6IjFhNDZlYjRlLWU4MTktNGI1Zi05MGM0LTJkYzliNDI3YTJhOCJ9.LoXLXsMXzuV-P5osuCo6q8HiPO42ZNh-v_XB6XNpvLyvmYl2VbOSPJLo8Gycdcu86GLHSO35g4MnNvE8EqejbFmaSnl5e-9IvcYJKexOkGQWvm4MMM355SKD9U05riSa6kjUANV2403SRalYkrUVSq9vR_q-Pv6_HpSmc78Tv7T7WarkEQ7yY7CgycNJO0n5AOBpoJ4yx07VchAB4rZSQyLnVFOEqw4ndWoDJU68-G9J-mgsHFDnZiuyw6MTJ2MZvSOHDGCX6PkFGFygYlCXIFJ3brwtuwWyWzgkueZA9JfPA5eG_os0GfcfvGo4pxx7Do9a2e3qbQUjrC6_fECWRw==',
-                'Content-Type': 'application/json'
-            },
-            httpsAgent: new https.Agent({
-                rejectUnauthorized: false
-            })
-        }
-
-        const body = {
-            "name":"yankes",
-            "pass":"hPkRnUrWtYw3y5A8DaFdJfMhQmSpUsXuZw4z6B9E",
-            "nik": data.nik,
-            "jnsid": "1"
-        }
-
-        axios.post(endPoint, body, config)
-        .then(response => {
-            const laporanCovid19Versi3Id = parseInt(id)
-            let sqlValue = null
-            if (response.data.result_code == '200') {
-                sqlValue = [
-                    data.kewarganegaraanId,
-                    data.nik,
-                    data.noPassport,
-                    data.asalPasienId,
-                    data.noRM,
-                    response.data.data[0].nama,
-                    data.namaInisialPasien,
-                    response.data.data[0].tgl_lahir,
-                    data.pengelompokanUmur,
-                    data.email,
-                    data.noTelp,
-                    response.data.data[0].jkel,
-                    response.data.data[0].alamat_keckd,
-                    response.data.data[0].alamat_kabkd,
-                    response.data.data[0].alamat_propkd,
-                    data.pekerjaanId,
-                    data.tanggalMasuk,
-                    data.jenisPasienId,
-                    data.varianCovidId,
-                    data.statusRawatId,
-                    data.severityLevelId,
-                    data.statusCoInsidenId,
-                    data.statusIsolasiId,
-                    data.saturasiOksigen,
-                    data.terapiOksigenId,
-                    data.alatOksigenId,
-                    data.ipConsumer,
-                    data.pengelompokanKewarganegaraan,
-                    data.penyintasId,
-                    data.tanggalOnsetGejala,
-                    data.kelompokGejalaId,
-                    data.gejala.demamId,
-                    data.gejala.batukId,
-                    data.gejala.pilekId,
-                    data.gejala.sakitTenggorokanId,
-                    data.gejala.sesakNapasId,
-                    data.gejala.lemasId,
-                    data.gejala.nyeriOtotId,
-                    data.gejala.mualMuntahId,
-                    data.gejala.diareId,
-                    data.gejala.anosmiaId,
-                    data.gejala.napasCepatId,
-                    data.gejala.frekNapas30KaliPerMenitId,
-                    data.gejala.distresPernapasanBeratId,
-                    data.gejala.lainnyaId,
-                    laporanCovid19Versi3Id,
-                    data.kodeRS
-                ]
-            } else if (response.data.result_code == '404') {
-                sqlValue = [
-                    data.kewarganegaraanId,
-                    data.nik,
-                    data.noPassport,
-                    data.asalPasienId,
-                    data.noRM,
-                    data.namaLengkapPasien,
-                    data.namaInisialPasien,
-                    data.tanggalLahir,
-                    data.pengelompokanUmur,
-                    data.email,
-                    data.noTelp,
-                    data.jenisKelaminId,
-                    data.domisiliKecamatanId,
-                    data.domisiliKabKotaId,
-                    data.domisiliProvinsiId,
-                    data.pekerjaanId,
-                    data.tanggalMasuk,
-                    data.jenisPasienId,
-                    data.varianCovidId,
-                    data.statusRawatId,
-                    data.severityLevelId,
-                    data.statusCoInsidenId,
-                    data.statusIsolasiId,
-                    data.saturasiOksigen,
-                    data.terapiOksigenId,
-                    data.alatOksigenId,
-                    data.ipConsumer,
-                    data.pengelompokanKewarganegaraan,
-                    data.penyintasId,
-                    data.tanggalOnsetGejala,
-                    data.kelompokGejalaId,
-                    data.gejala.demamId,
-                    data.gejala.batukId,
-                    data.gejala.pilekId,
-                    data.gejala.sakitTenggorokanId,
-                    data.gejala.sesakNapasId,
-                    data.gejala.lemasId,
-                    data.gejala.nyeriOtotId,
-                    data.gejala.mualMuntahId,
-                    data.gejala.diareId,
-                    data.gejala.anosmiaId,
-                    data.gejala.napasCepatId,
-                    data.gejala.frekNapas30KaliPerMenitId,
-                    data.gejala.distresPernapasanBeratId,
-                    data.gejala.lainnyaId,
-                    laporanCovid19Versi3Id,
-                    data.kodeRS
-                ]
-            }
-
-            const sql = 'UPDATE covid.covid_v3 SET ' +
-                'kode_negara=?,' +
-                'nik=?,' +
-                'no_identitas_lain=?,' +
-                'asalpasien=?,' +
-                'nomr=?,' +
-                'nama_lengkap=?,' +
-                'initial=?,' +
-                'birthdate=?,' +
-                'age=?,' +
-                'email=?,' +
-                'notelp=?,' +
-                'gender=?,' +
-                'kecamatan=?,' +
-                'kabkota=?,' +
-                'propinsi=?,' +
-                'profesi=?,' +
-                'tglmasuk=?,' +
-                'jenis_pasien=?,' +
-                'varian=?,' +
-                'status_rawat=?,' +
-                'severity=?,' +
-                'coinsiden=?,' +
-                'status_isolasi=?,' +
-                'saturasi=?,' +
-                'oksigen=?, ' +
-                'alatoksigen=?, ' +
-                'ip_reg=?,' +
-                'kwn=?, ' +
-                'penyintas=?, ' +
-                'tglonset=?, ' +
-                'gejala=?, ' +
-                'gejala_demam=?, ' +
-                'gejala_batuk=?, ' +
-                'gejala_pilek=?, ' +
-                'gejala_sakittenggorokan=?, ' +
-                'gejala_sesak=?, ' +
-                'gejala_lemas=?, ' +
-                'gejala_nyeriotot=?, ' +
-                'gejala_mual=?, ' +
-                'gejala_diare=?, ' +
-                'gejala_anosmia=?, ' +
-                'napas_cepat=?, ' +
-                'frek_napas=?, ' +
-                'distress=?, ' +
-                'gejala_lainnya=?, ' +
-                'tgl_update=now() ' +
-            'WHERE id_trans = ? AND koders = ?'
-
-            const database = new Database(pool)
-            database.query(sql, sqlValue)
-            .then(
-                (res) => {
-                    if (res.affectedRows === 0 && res.changedRows === 0) {
-                        callback(null, 'no row matched');
-                        return
-                    }
-                    let resourceUpdated = {
-                        id: id
-                    } 
-                    callback(null, resourceUpdated);
-                },(error) => {
-                    throw error
-                }
-            ).catch((error) => {
-                callback(error, null)
-            })
-        })
-    }
-
     insertDataEncripted(data, callback) {
         const database = new Database(pool)
         // Searching NIK in NAR API
@@ -857,10 +379,10 @@ class LaporanCovid19Versi3 {
                         // Preparing Searching NIK query
                         // #######################################################################
                         const sqlNIKSearch = 'SELECT ' +
-                            'covid.covid_v3_encrypted.id_trans,' +
-                            'covid.covid_v3_encrypted.nik ' +
-                        'FROM covid.covid_v3_encrypted ' +
-                        'WHERE covid.covid_v3_encrypted.koders = ? AND covid.covid_v3_encrypted.nik = ? AND covid.covid_v3_encrypted.tglkeluar = "0000-00-00"'
+                            'covid.covid_v3.id_trans,' +
+                            'covid.covid_v3.nik ' +
+                        'FROM covid.covid_v3 ' +
+                        'WHERE covid.covid_v3.koders = ? AND covid.covid_v3.nik = ? AND covid.covid_v3.tglkeluar = "0000-00-00"'
                         const sqlFilterValue = [
                             data.kodeRS,
                             resCipertext[0].data.result
@@ -934,7 +456,7 @@ class LaporanCovid19Versi3 {
                                     ]
                                     // Preparing insert command for covid data
                                     // #######################################################################
-                                    const sqlInsert = 'INSERT INTO covid.covid_v3_encrypted ' +
+                                    const sqlInsert = 'INSERT INTO covid.covid_v3 ' +
                                         '( ' +
                                         'kode_negara,' +
                                         'kewarganegaraan, ' +
@@ -1047,6 +569,7 @@ class LaporanCovid19Versi3 {
                                                             ])
                                                         })
                                                         // Inserting result lab data
+                                                        // ############################################################################
                                                         return database.query(sqlInsertHasilLab,[hasilLab])
                                                     }
                                                     return
@@ -1056,10 +579,40 @@ class LaporanCovid19Versi3 {
                                             )
                                             .then(
                                                 (resHasilLab) => {
-                                                    dataInserted = {
-                                                        id: resInsert.insertId
-                                                    }
-                                                    callback(null, dataInserted)
+                                                    // Searching Vaksin Data in Peduli Lindungi
+                                                    // ################################################################################
+                                                    this.getVaksinData(data.nik)
+                                                    .then(
+                                                        (resVaksinData) => {
+                                                            // let arrData = []
+                                                            // let vaksinKe = null
+                                                            // resVaksinData.data.data.vaccinations.forEach(element => {
+                                                            //     if (element['type'] == 'first') {
+                                                            //         vaksinKe = 1
+                                                            //     } else if (element['type'] == 'second') {
+                                                            //         vaksinKe = 2
+                                                            //     } else if (element['type'] == 'third') {
+                                                            //         vaksinKe = 3
+                                                            //     }
+                                                            //     arrData.push({
+                                                            //         nik: args,
+                                                            //         tanggal: dateFormat(element['date'], 'yyyy-mm-dd'),
+                                                            //         vaksinKe: vaksinKe,
+                                                            //         type: element['type'],
+                                                            //         vaccine_type: element['vaccine_type'],
+                                                            //         vaccine_type_name: element['vaccine_type_name']
+                                                            //     })
+                                                            // })
+                                                            console.log(resVaksinData)
+                                                            dataInserted = {
+                                                                id: resInsert.insertId
+                                                            }
+                                                            callback(null, dataInserted)
+                                                        }
+                                                    )
+                                                    .catch((error) => {
+                                                        callback(error, null)
+                                                    })
                                                 }, (error) => {
                                                     throw error
                                                 }
@@ -1156,10 +709,10 @@ class LaporanCovid19Versi3 {
                         // Preparing Searching NIK query
                         // #######################################################################
                         const sqlNIKSearch = 'SELECT ' +
-                            'covid.covid_v3_encrypted.id_trans,' +
-                            'covid.covid_v3_encrypted.nik ' +
-                        'FROM covid.covid_v3_encrypted ' +
-                        'WHERE covid.covid_v3_encrypted.koders = ? AND covid.covid_v3_encrypted.nik = ? AND covid.covid_v3_encrypted.id_trans != ? AND covid.covid_v3_encrypted.tglkeluar = "0000-00-00"'
+                            'covid.covid_v3.id_trans,' +
+                            'covid.covid_v3.nik ' +
+                        'FROM covid.covid_v3 ' +
+                        'WHERE covid.covid_v3.koders = ? AND covid.covid_v3.nik = ? AND covid.covid_v3.id_trans != ? AND covid.covid_v3.tglkeluar = "0000-00-00"'
                         const sqlFilterValue = [
                             data.kodeRS,
                             resCipertext[0].data.result,
@@ -1230,7 +783,7 @@ class LaporanCovid19Versi3 {
                                     ]
                                     // Preparing update command for covid data
                                     // #######################################################################
-                                    const sqlUpdate = 'UPDATE covid.covid_v3_encrypted SET ' +
+                                    const sqlUpdate = 'UPDATE covid.covid_v3 SET ' +
                                         'kode_negara=?,' +
                                         'nik=?,' +
                                         'no_identitas_lain=?,' +
@@ -1470,6 +1023,63 @@ class LaporanCovid19Versi3 {
                     .catch((error) => {
                         reject(error)
                     })
+                }
+            )
+            .catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
+    getToken() {
+        const endPoint = 'https://api-satu-data.dto.kemkes.go.id/v1/auth/authenticate'
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        const body = {
+            "username": "yankes",
+            "public_key": "MIGJAoGBALREFpvGZXUvzsogEUgu/3qZuEEBGYaMBoD0rVvTfhrtjsokC1/Idx4FUdPn67PBD4NL7eLVtBvs9mxUSrOqo1y4buLwPB64PA0Nfw9Sv+s0UvJFQ0F2VJT+gvT1aACthisSHn2NZzx2G5xcEq55ZdynAs3odJxs9fh/qQqek0gNAgMBAAE="
+        }
+        return new Promise((resolve, reject) => {
+            axios.post(endPoint, body, config) 
+            .then(
+                (res) => {
+                    resolve(res)
+                }
+            )
+            .catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
+    getVaksinData(args) {
+        return new Promise((resolve, reject) => {
+            this.getToken()
+            .then(
+                (resToken) => {
+                    if(resToken.data.status_code == 200) {
+                        const endPoint = 'https://api-satu-data.dto.kemkes.go.id/v1/yankes/vaksin'
+                        const config = {
+                            headers: {
+                                'Authorization': resToken.data.data.access_token
+                            },
+                            params: {
+                                nik: args
+                            }
+                        }
+                        axios.get(endPoint, config)
+                        .then(
+                            (resVaksin) => {
+                                resolve(resVaksin)
+                            }
+                        )
+                        .catch((error) => {
+                            reject(error)
+                        })
+                    }
                 }
             )
             .catch((error) => {
