@@ -320,20 +320,6 @@ class LaporanCovid19Versi3 {
         )
     }
 
-    insertData(data, callback) {
-        this.getVaksinData(data.nik)
-        .then(
-            (resVaksin) => {
-                console.log(resVaksin.data)
-                callback(null, 'hello')
-            }
-        )
-        .catch((error) => {
-            console.log(error)
-            callback(error, null)
-        })
-    }
-
     insertDataEncripted(data, callback) {
         const database = new Database(pool)
         // Searching NIK in NAR API
@@ -402,7 +388,7 @@ class LaporanCovid19Versi3 {
                             resCipertext[0].data.result
                         ]
                         // Searching NIK in DB
-                        // #######################################################################
+                        // ##################################################################################
                         database.query(sqlNIKSearch, sqlFilterValue)
                         .then(
                             (resNIKSearch) => {
@@ -945,6 +931,7 @@ class LaporanCovid19Versi3 {
                                                             ])
                                                         })
                                                         // Inserting result lab data
+                                                        // #############################################################################
                                                         return database.query(sqlInsertHasilLab,[hasilLab])
                                                     }
                                                     return
@@ -953,18 +940,92 @@ class LaporanCovid19Versi3 {
                                                 }
                                             )
                                             .then(
-                                                (res) => {
-                                                    console.log(res)
-                                                    if (resNIKData.result_code == 200) {
-                                                        if (res.affectedRows === 0 && res.changedRows === 0) {
-                                                            callback(null, 'no row matched');
-                                                            return
+                                                (resInsertHasilLab) => {
+                                                    // Searching Vaksin Data in Peduli Lindungi
+                                                    // ######################################################################################
+                                                    this.getVaksinData(data.nik)
+                                                    .then(
+                                                        (resVaksinData) => {
+                                                            // if data vaksin was founded
+                                                            // ##############################################################################
+                                                            if(resVaksinData.data.message == 'data found') {
+                                                                // Preparing delete command for vaksin
+                                                                // ##########################################################################
+                                                                const sqlDeleteVaksin = 'DELETE FROM covid.t_api_vaksin_dto ' +
+                                                                    'WHERE covid.t_api_vaksin_dto.nik_encrypt = ? '
+                                                                // Deleting Vaksin
+                                                                database.query(sqlDeleteVaksin, [resCipertext[0].data.result])
+                                                                .then(
+                                                                    (resDeleteVaksin) => {
+                                                                        // Assigning vaksin variable
+                                                                        // ####################################################################
+                                                                        let vaksinData = []
+                                                                        let vaksinKe = null
+                                                                        resVaksinData.data.data.forEach(element => {
+                                                                            if (element['type'] == 'first') {
+                                                                                vaksinKe = 1
+                                                                            } else if (element['type'] == 'second') {
+                                                                                vaksinKe = 2
+                                                                            } else if (element['type'] == 'third') {
+                                                                                vaksinKe = 3
+                                                                            }
+                                                                            vaksinData.push([
+                                                                                data.nik,
+                                                                                dateFormat(element['date'], 'yyyy-mm-dd'),
+                                                                                vaksinKe,
+                                                                                element['vaccine_type'],
+                                                                                element['vaccine_type_name'],
+                                                                                resCipertext[0].data.result
+                                                                            ])
+                                                                        })
+                                                                        // Preparing insert command for vaksin
+                                                                        // ###############################################################
+                                                                        const sqlInsertVaksin = 'INSERT INTO covid.t_api_vaksin_dto ' +
+                                                                            '( ' +
+                                                                                'nik,' +
+                                                                                'tglvaksin,' +
+                                                                                'vaksin_ke,' +
+                                                                                'tipe_vaksin,' +
+                                                                                'nama_vaksin,' +
+                                                                                'nik_encrypt' +
+                                                                            ') ' +
+                                                                        'VALUES ? '
+                                                                        // Inserting Vaksin Data to DB
+                                                                        // ################################################################
+                                                                        database.query(sqlInsertVaksin,[vaksinData])
+                                                                        .then(
+                                                                            (resInsertVaksin) => {
+                                                                                if (resNIKData.result_code == 200) {
+                                                                                    if (resInsertVaksin.affectedRows === 0 && resInsertVaksin.changedRows === 0) {
+                                                                                        callback(null, 'no row matched');
+                                                                                        return
+                                                                                    }
+                                                                                }
+                                                                                let resourceUpdated = {
+                                                                                    id: id
+                                                                                }
+                                                                                callback(null, resourceUpdated);
+                                                                            }
+                                                                        )
+                                                                        .catch((error) => {
+                                                                            callback(error, null)
+                                                                        })
+                                                                    }
+                                                                )
+                                                                .catch((error) => {
+                                                                    callback(error, null)
+                                                                })
+                                                                return
+                                                            }
+                                                            let resourceUpdated = {
+                                                                id: id
+                                                            }
+                                                            callback(null, resourceUpdated);
                                                         }
-                                                    }
-                                                    let resourceUpdated = {
-                                                        id: id
-                                                    }
-                                                    callback(null, resourceUpdated);
+                                                    )
+                                                    .catch((error) => {
+                                                        callback(error, null)
+                                                    })
                                                 }, (error) => {
                                                     throw error
                                                 }

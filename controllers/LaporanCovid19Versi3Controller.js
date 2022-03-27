@@ -62,6 +62,8 @@ class LaporanCovid19Versi3Controller {
     }
 
     store(req, res) {
+        // Validation input
+        // ###################################################################################################
         const schema = Joi.object({
             kewarganegaraanId: Joi.string().required(),
             nik: Joi.string().required(),
@@ -114,9 +116,7 @@ class LaporanCovid19Versi3Controller {
             })
             return
         }
-
         let dateObject = new Date()
-
         let tanggal = ("0" + dateObject.getDate()).slice(-2);
         let bulan = ("0" + (dateObject.getMonth() + 1)).slice(-2);
         let tahun = dateObject.getFullYear();
@@ -130,7 +130,8 @@ class LaporanCovid19Versi3Controller {
         
         let tanggalMasuk = moment(req.body.tanggaMasuk, 'YYYY-MM-DD')
         let masaRawatHari = today.diff(tanggalMasuk, 'days')
-
+        // Validation umur
+        // ###################################################################################################
         if (umurHari < 0) {
             res.status(422).send({
                 status: false,
@@ -138,7 +139,8 @@ class LaporanCovid19Versi3Controller {
             })
             return
         }
-
+        // Validation tanggal masuk
+        // ###################################################################################################
         if (masaRawatHari < 0) {
             res.status(422).send({
                 status: false,
@@ -146,7 +148,8 @@ class LaporanCovid19Versi3Controller {
             })
             return
         }
-
+        // determining pengelompokan umur
+        // ###################################################################################################
         switch(true) {
             case (umur < 11):
                 pengelompokanUmur = 1
@@ -176,7 +179,8 @@ class LaporanCovid19Versi3Controller {
                 pengelompokanUmur = 9
                 break
         }
-
+        // Determining pengelompokan kewarganegaraan
+        // ###################################################################################################
         let pengelompokanKewarganegaraan = null
         switch(true) {
             case (req.body.kewarganegaraanId == 'ID'):
@@ -186,62 +190,16 @@ class LaporanCovid19Versi3Controller {
                 pengelompokanKewarganegaraan = 2
                 break
         }
-
+        // Determining pengelompokan saturasi oksigen and severity level
+        // ###################################################################################################
         let pengelompokanSaturasiOksigen = null
         let severityLevelId = null
+        let gejala = null
+        // Jika tanpa gejala
+        // ###################################################################################################
         if (req.body.kelompokGejalaId == 1) {
             pengelompokanSaturasiOksigen = '>= 95'
             severityLevelId = 4
-            if (req.body.alatOksigenId != null) {
-                res.status(422).send({
-                    status: false,
-                    message: `Hanya null alatOksigenId yang diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
-                })
-                return
-            }
-            
-        } else if (req.body.kelompokGejalaId == 2) {
-            pengelompokanSaturasiOksigen = '>= 95'
-            severityLevelId = 1
-            if (req.body.alatOksigenId != null) {
-                res.status(422).send({
-                    status: false,
-                    message: `Hanya null alatOksigenId yang diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
-                })
-                return
-            }
-        } else if (req.body.kelompokGejalaId == 3) {
-            pengelompokanSaturasiOksigen = '>= 93'
-            severityLevelId = 2
-            let alatOksigen = [1,2]
-            if (alatOksigen.indexOf(parseInt(req.body.alatOksigenId)) < 0) {
-                res.status(422).send({
-                    status: false,
-                    message: `alatOksigenId ${req.body.alatOksigenId} tidak diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
-                })
-                return
-            }
-        } else if (req.body.kelompokGejalaId == 4) {
-            pengelompokanSaturasiOksigen = '< 93'   
-            severityLevelId = 3
-            let alatOksigen = [2,3,4,5]
-            if (alatOksigen.indexOf(parseInt(req.body.alatOksigenId)) < 0) {
-                res.status(422).send({
-                    status: false,
-                    message: `alatOksigenId ${req.body.alatOksigenId} tidak diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
-                })
-                return
-            }
-        } else {
-            res.status(422).send({
-                status: false,
-                message: 'nilai kelompokGejalaId tersebut tidak diijinkan'
-            })
-            return
-        }
-
-        let gejala = null
-        if (req.body.kelompokGejalaId == 1) {
             gejala = {
                 demamId: 0,
                 batukId: 0,
@@ -258,7 +216,19 @@ class LaporanCovid19Versi3Controller {
                 distresPernapasanBeratId: 0,
                 lainnyaId: 0
             }
-        } else if (req.body.kelompokGejalaId == 2) {
+            if (req.body.alatOksigenId != null) {
+                res.status(422).send({
+                    status: false,
+                    message: `Hanya null alatOksigenId yang diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
+                })
+                return
+            }  
+        } 
+        // Jika bergejala, tanpa klinis pnemonia
+        // ###################################################################################################
+        else if (req.body.kelompokGejalaId == 2) {
+            pengelompokanSaturasiOksigen = '>= 95'
+            severityLevelId = 1
             gejala = {
                 demamId: req.body.gejala.demamId,
                 batukId: req.body.gejala.batukId,
@@ -275,7 +245,19 @@ class LaporanCovid19Versi3Controller {
                 distresPernapasanBeratId: 0,
                 lainnyaId: req.body.gejala.lainnyaId
             }
-        } else if (req.body.kelompokGejalaId == 3) {
+            if (req.body.alatOksigenId != null) {
+                res.status(422).send({
+                    status: false,
+                    message: `Hanya null alatOksigenId yang diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
+                })
+                return
+            }
+        } 
+        // Jika bergejala, dengan tanda klinis pnemononia
+        // ###################################################################################################
+        else if (req.body.kelompokGejalaId == 3) {
+            pengelompokanSaturasiOksigen = '>= 93'
+            severityLevelId = 2
             gejala = {
                 demamId: req.body.gejala.demamId,
                 batukId: req.body.gejala.batukId,
@@ -287,12 +269,25 @@ class LaporanCovid19Versi3Controller {
                 mualMuntahId: req.body.gejala.mualMuntahId,
                 diareId: req.body.gejala.diareId,
                 anosmiaId: req.body.gejala.anosmiaId,
-                napasCepatId: req.body.gejala.napasCepatId,
-                frekNapas30KaliPerMenitId: req.body.gejala.frekNapas30KaliPerMenitId,
-                distresPernapasanBeratId: req.body.gejala.distresPernapasanBeratId,
+                napasCepatId: 0,
+                frekNapas30KaliPerMenitId: 0,
+                distresPernapasanBeratId: 0,
                 lainnyaId: req.body.gejala.lainnyaId
             }
-        } else if (req.body.kelompokGejalaId == 4) {
+            let alatOksigen = [1,2]
+            if (alatOksigen.indexOf(parseInt(req.body.alatOksigenId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `alatOksigenId ${req.body.alatOksigenId} tidak diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
+                })
+                return
+            }
+        } 
+        // Jika bergejala, dengan tanda klinis pneumonia berat
+        // ###################################################################################################
+        else if (req.body.kelompokGejalaId == 4) {
+            pengelompokanSaturasiOksigen = '< 93'   
+            severityLevelId = 3
             gejala = {
                 demamId: req.body.gejala.demamId,
                 batukId: req.body.gejala.batukId,
@@ -309,14 +304,67 @@ class LaporanCovid19Versi3Controller {
                 distresPernapasanBeratId: 1,
                 lainnyaId: req.body.gejala.lainnyaId
             }
+            let alatOksigen = [2,3,4,5]
+            if (alatOksigen.indexOf(parseInt(req.body.alatOksigenId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `alatOksigenId ${req.body.alatOksigenId} tidak diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
+                })
+                return
+            }
+        } else {
+            res.status(422).send({
+                status: false,
+                message: 'nilai kelompokGejalaId tersebut tidak diijinkan'
+            })
+            return
         }
-
+        // Validating Status Rawat
+        // ###################################################################################################
+        // Jika jenis pasien rawat jalan
+        // ###################################################################################################
+        if(req.body.jenisPasienId == 1) {
+            let statusRawatId = [0]
+            if(statusRawatId.indexOf(parseInt(req.body.statusRawatId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `statusRawatId ${req.body.statusRawatId} tidak diijinkan untuk jenisPasienId ${req.body.jenisPasienId}`
+                })
+                return
+            }
+        }
+        // Jika jenis pasien igd
+        // ###################################################################################################
+        if(req.body.jenisPasienId == 2) {
+            let statusRawatId = [32]
+            if(statusRawatId.indexOf(parseInt(req.body.statusRawatId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `statusRawatId ${req.body.statusRawatId} tidak diijinkan untuk jenisPasienId ${req.body.jenisPasienId}`
+                })
+                return
+            }
+        }
+        // Jika rawat inap
+        // ###################################################################################################
+        else if(req.body.jenisPasienId == 3) {
+            let statusRawatId = [24,25,26,27,28,29,30,31,33]
+            if(statusRawatId.indexOf(parseInt(req.body.statusRawatId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `statusRawatId ${req.body.statusRawatId} tidak diijinkan untuk jenisPasienId ${req.body.jenisPasienId}`
+                })
+                return
+            }
+        }
+        // Assigning terapiOksigenId for DB
+        // ##################################################################################################
         let terapiOksigenId = null
         if (req.body.alatOksigenId == null) {
             terapiOksigenId = 0
         } else { terapiOksigenId = 1 }
-
-
+        // Assigning data for inserting into DB
+        // ##################################################################################################
         const data = {
             kewarganegaraanId: req.body.kewarganegaraanId,
             nik: req.body.nik,
@@ -352,7 +400,8 @@ class LaporanCovid19Versi3Controller {
             kelompokGejalaId: req.body.kelompokGejalaId,
             gejala: gejala
         }
-        
+        // Inserting Data into DB
+        // ##################################################################################################
         const laporanCovid19Versi3Object = new laporanCovid19Versi3()
         laporanCovid19Versi3Object.insertDataEncripted(data, (err, result) => {
             if (err) {
@@ -377,6 +426,8 @@ class LaporanCovid19Versi3Controller {
     }
 
     update(req, res) {
+        // Validation input
+        // ###################################################################################################
         const schema = Joi.object({
             kewarganegaraanId: Joi.string().required(),
             nik: Joi.string().required(),
@@ -446,6 +497,8 @@ class LaporanCovid19Versi3Controller {
         let tanggalMasuk = moment(req.body.tanggaMasuk, 'YYYY-MM-DD')
         let masaRawatHari = today.diff(tanggalMasuk, 'days')
 
+        // Validation umur
+        // ###################################################################################################
         if (umurHari < 0) {
             res.status(422).send({
                 status: false,
@@ -453,7 +506,8 @@ class LaporanCovid19Versi3Controller {
             })
             return
         }
-
+        // Validation tanggal masuk
+        // ###################################################################################################
         if (masaRawatHari < 0) {
             res.status(422).send({
                 status: false,
@@ -461,7 +515,8 @@ class LaporanCovid19Versi3Controller {
             })
             return
         }
-
+        // determining pengelompokan umur
+        // ###################################################################################################
         switch(true) {
             case (umur < 11):
                 pengelompokanUmur = 1
@@ -491,7 +546,8 @@ class LaporanCovid19Versi3Controller {
                 pengelompokanUmur = 9
                 break
         }
-
+        // Determining pengelompokan kewarganegaraan
+        // ###################################################################################################
         let pengelompokanKewarganegaraan = null
         switch(true) {
             case (req.body.kewarganegaraanId == 'ID'):
@@ -501,62 +557,16 @@ class LaporanCovid19Versi3Controller {
                 pengelompokanKewarganegaraan = 2
                 break
         }
-
+        // Determining pengelompokan saturasi oksigen and severity level
+        // ###################################################################################################
         let pengelompokanSaturasiOksigen = null
         let severityLevelId = null
+        let gejala = null
+        // Jika tanpa gejala
+        // ###################################################################################################
         if (req.body.kelompokGejalaId == 1) {
             pengelompokanSaturasiOksigen = '>= 95'
             severityLevelId = 4
-            if (req.body.alatOksigenId != null) {
-                res.status(422).send({
-                    status: false,
-                    message: `Hanya null alatOksigenId yang diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
-                })
-                return
-            }
-            
-        } else if (req.body.kelompokGejalaId == 2) {
-            pengelompokanSaturasiOksigen = '>= 95'
-            severityLevelId = 1
-            if (req.body.alatOksigenId != null) {
-                res.status(422).send({
-                    status: false,
-                    message: `Hanya null alatOksigenId yang diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
-                })
-                return
-            }
-        } else if (req.body.kelompokGejalaId == 3) {
-            pengelompokanSaturasiOksigen = '>= 93'
-            severityLevelId = 2
-            let alatOksigen = [1,2]
-            if (alatOksigen.indexOf(parseInt(req.body.alatOksigenId)) < 0) {
-                res.status(422).send({
-                    status: false,
-                    message: `alatOksigenId ${req.body.alatOksigenId} tidak diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
-                })
-                return
-            }
-        } else if (req.body.kelompokGejalaId == 4) {
-            pengelompokanSaturasiOksigen = '< 93'   
-            severityLevelId = 3
-            let alatOksigen = [2,3,4,5]
-            if (alatOksigen.indexOf(parseInt(req.body.alatOksigenId)) < 0) {
-                res.status(422).send({
-                    status: false,
-                    message: `alatOksigenId ${req.body.alatOksigenId} tidak diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
-                })
-                return
-            }
-        } else {
-            res.status(422).send({
-                status: false,
-                message: 'nilai kelompokGejalaId tersebut tidak diijinkan'
-            })
-            return
-        }
-
-        let gejala = null
-        if (req.body.kelompokGejalaId == 1) {
             gejala = {
                 demamId: 0,
                 batukId: 0,
@@ -573,7 +583,19 @@ class LaporanCovid19Versi3Controller {
                 distresPernapasanBeratId: 0,
                 lainnyaId: 0
             }
-        } else if (req.body.kelompokGejalaId == 2) {
+            if (req.body.alatOksigenId != null) {
+                res.status(422).send({
+                    status: false,
+                    message: `Hanya null alatOksigenId yang diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
+                })
+                return
+            }  
+        } 
+        // Jika bergejala, tanpa klinis pnemonia
+        // ###################################################################################################
+        else if (req.body.kelompokGejalaId == 2) {
+            pengelompokanSaturasiOksigen = '>= 95'
+            severityLevelId = 1
             gejala = {
                 demamId: req.body.gejala.demamId,
                 batukId: req.body.gejala.batukId,
@@ -590,7 +612,19 @@ class LaporanCovid19Versi3Controller {
                 distresPernapasanBeratId: 0,
                 lainnyaId: req.body.gejala.lainnyaId
             }
-        } else if (req.body.kelompokGejalaId == 3) {
+            if (req.body.alatOksigenId != null) {
+                res.status(422).send({
+                    status: false,
+                    message: `Hanya null alatOksigenId yang diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
+                })
+                return
+            }
+        } 
+        // Jika bergejala, dengan tanda klinis pnemononia
+        // ###################################################################################################
+        else if (req.body.kelompokGejalaId == 3) {
+            pengelompokanSaturasiOksigen = '>= 93'
+            severityLevelId = 2
             gejala = {
                 demamId: req.body.gejala.demamId,
                 batukId: req.body.gejala.batukId,
@@ -602,12 +636,25 @@ class LaporanCovid19Versi3Controller {
                 mualMuntahId: req.body.gejala.mualMuntahId,
                 diareId: req.body.gejala.diareId,
                 anosmiaId: req.body.gejala.anosmiaId,
-                napasCepatId: req.body.gejala.napasCepatId,
-                frekNapas30KaliPerMenitId: req.body.gejala.frekNapas30KaliPerMenitId,
-                distresPernapasanBeratId: req.body.gejala.distresPernapasanBeratId,
+                napasCepatId: 0,
+                frekNapas30KaliPerMenitId: 0,
+                distresPernapasanBeratId: 0,
                 lainnyaId: req.body.gejala.lainnyaId
             }
-        } else if (req.body.kelompokGejalaId == 4) {
+            let alatOksigen = [1,2]
+            if (alatOksigen.indexOf(parseInt(req.body.alatOksigenId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `alatOksigenId ${req.body.alatOksigenId} tidak diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
+                })
+                return
+            }
+        } 
+        // Jika bergejala, dengan tanda klinis pneumonia berat
+        // ###################################################################################################
+        else if (req.body.kelompokGejalaId == 4) {
+            pengelompokanSaturasiOksigen = '< 93'   
+            severityLevelId = 3
             gejala = {
                 demamId: req.body.gejala.demamId,
                 batukId: req.body.gejala.batukId,
@@ -624,14 +671,67 @@ class LaporanCovid19Versi3Controller {
                 distresPernapasanBeratId: 1,
                 lainnyaId: req.body.gejala.lainnyaId
             }
+            let alatOksigen = [2,3,4,5]
+            if (alatOksigen.indexOf(parseInt(req.body.alatOksigenId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `alatOksigenId ${req.body.alatOksigenId} tidak diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
+                })
+                return
+            }
+        } else {
+            res.status(422).send({
+                status: false,
+                message: 'nilai kelompokGejalaId tersebut tidak diijinkan'
+            })
+            return
         }
-
+        // Validating Status Rawat
+        // ###################################################################################################
+        // Jika jenis pasien rawat jalan
+        // ###################################################################################################
+        if(req.body.jenisPasienId == 1) {
+            let statusRawatId = [0]
+            if(statusRawatId.indexOf(parseInt(req.body.statusRawatId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `statusRawatId ${req.body.statusRawatId} tidak diijinkan untuk jenisPasienId ${req.body.jenisPasienId}`
+                })
+                return
+            }
+        }
+        // Jika jenis pasien igd
+        // ###################################################################################################
+        if(req.body.jenisPasienId == 2) {
+            let statusRawatId = [32]
+            if(statusRawatId.indexOf(parseInt(req.body.statusRawatId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `statusRawatId ${req.body.statusRawatId} tidak diijinkan untuk jenisPasienId ${req.body.jenisPasienId}`
+                })
+                return
+            }
+        }
+        // Jika rawat inap
+        // ###################################################################################################
+        else if(req.body.jenisPasienId == 3) {
+            let statusRawatId = [24,25,26,27,28,29,30,31,33]
+            if(statusRawatId.indexOf(parseInt(req.body.statusRawatId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `statusRawatId ${req.body.statusRawatId} tidak diijinkan untuk jenisPasienId ${req.body.jenisPasienId}`
+                })
+                return
+            }
+        }
+        // Assigning terapiOksigenId for DB
+        // ##################################################################################################
         let terapiOksigenId = null
         if (req.body.alatOksigenId == null) {
             terapiOksigenId = 0
         } else { terapiOksigenId = 1 }
-
-
+        // Assigning data for inserting into DB
+        // ##################################################################################################
         const data = {
             kewarganegaraanId: req.body.kewarganegaraanId,
             nik: req.body.nik,
@@ -667,7 +767,8 @@ class LaporanCovid19Versi3Controller {
             kelompokGejalaId: req.body.kelompokGejalaId,
             gejala: gejala
         }
-        
+        // Updating Data into DB
+        // ##################################################################################################
         const laporanCovid19Versi3Object = new laporanCovid19Versi3()
         laporanCovid19Versi3Object.updateDataEncripted(data, req.params.id, (err, result) => {
             if (err) {

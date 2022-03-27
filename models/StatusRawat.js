@@ -14,7 +14,18 @@ class StatusRawat {
         database.query(sql)
         .then(
             (res) => {
-                callback(null, res)
+                let arrData = []
+                arrData.push({
+                    id: 0,
+                    nama: 'Isolasi Mandiri di Rumah'
+                })
+                res.forEach(element => {
+                    arrData.push({
+                        id: element.id,
+                        nama: element.nama
+                    }) 
+                });
+                callback(null, arrData)
             },(error) => {
                 throw error
             }
