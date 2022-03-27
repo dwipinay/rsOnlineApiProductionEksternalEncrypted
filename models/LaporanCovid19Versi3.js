@@ -20,6 +20,8 @@ class LaporanCovid19Versi3 {
                 'ELSE "Lainnya"' +
             'END as jenis_kelamin_nama,' +
             'covid.covid_v3.birthdate as tanggal_lahir,' +
+            'covid.covid_v3.email,' +
+            'covid.covid_v3.notelp as no_telp,' +
             'covid.kelompokumur.kelompok_umur as kelompok_umur,' +
             'covid.covid_v3.kecamatan as domisili_kecamatan_id,' +
             'reference.kecamatan.nama as domisili_kecamatan_nama,' +
@@ -32,6 +34,8 @@ class LaporanCovid19Versi3 {
             'covid.profesi.deskripsi as pekerjaan_nama,' +
             'covid.covid_v3.jenis_pasien as jenis_pasien_id,' +
             'covid.jenis_pasien.deskripsi as jenis_pasien_nama,' +
+            'covid.covid_v3.varian as varian_covid_id, ' +
+            'm_varian_covid.jenis_varian as varian_covid_nama, ' +
             'covid.covid_v3.status_rawat as status_pasien_id,' +
             'covid.status_rawat_kmk.status as status_pasien_nama ,' +
             'CASE ' +
@@ -47,6 +51,8 @@ class LaporanCovid19Versi3 {
             'END as status_coinsiden_nama,' +
             'covid.covid_v3.status_isolasi as status_rawat_id,' +
             'db_fasyankes.m_tempat_tidur.tt as status_rawat_nama,' +
+            'covid.covid_v3.alatoksigen as alat_oksigen_id,' +
+            'covid.m_alatoksigen.nama_alat as alat_oksigen_nama,' +
             'covid.covid_v3.saturasi as saturasi_oksigen,' +
             'covid.covid_v3.oksigen as terapi_oksigen_id,' +
             'CASE ' +
@@ -54,7 +60,29 @@ class LaporanCovid19Versi3 {
                 'WHEN covid.covid_v3.oksigen = "1" THEN "ya"' +
                 'ELSE "null"' +
             'END as terapi_oksigen_nama,' +
-            'covid.covid_v3.tgl_lapor as tanggal_lapor '
+            'covid.covid_v3.penyintas as penyintas_id,' +
+            'CASE ' +
+                'WHEN covid.covid_v3.penyintas = "0" THEN "tidak"' +
+                'WHEN covid.covid_v3.penyintas = "1" THEN "ya"' +
+                'ELSE "null"' +
+            'END as penyintas_nama,' +
+            'covid.covid_v3.tgl_lapor as tanggal_lapor,' +
+            'covid.covid_v3.gejala as gejala_id, ' +
+            'm_gejala_covid.deskripsi_gejala as gejala_nama,' +
+            'covid.covid_v3.gejala_demam,' +
+            'covid.covid_v3.gejala_batuk,' +
+            'covid.covid_v3.gejala_pilek,' +
+            'covid.covid_v3.gejala_sakittenggorokan,' +
+            'covid.covid_v3.gejala_sesak,' +
+            'covid.covid_v3.gejala_lemas,' +
+            'covid.covid_v3.gejala_nyeriotot,' +
+            'covid.covid_v3.gejala_mual,' +
+            'covid.covid_v3.gejala_diare,' +
+            'covid.covid_v3.gejala_anosmia,' +
+            'covid.covid_v3.napas_cepat,' +
+            'covid.covid_v3.frek_napas,' +
+            'covid.covid_v3.distress,' +
+            'covid.covid_v3.gejala_lainnya '
 
         const sqlFrom = 'FROM ' +
             'covid.covid_v3 ' +
@@ -64,7 +92,10 @@ class LaporanCovid19Versi3 {
             'LEFT OUTER JOIN reference.provinsi ON reference.provinsi.id = reference.kab_kota.provinsi_id ' +
             'LEFT OUTER JOIN covid.profesi ON covid.profesi.id_profesi = covid.covid_v3.profesi ' +
             'LEFT OUTER JOIN covid.jenis_pasien ON covid.jenis_pasien.id_jenis_pasien = covid.covid_v3.jenis_pasien ' +
+            'LEFT OUTER JOIN covid.m_varian_covid ON covid.m_varian_covid.id = covid.covid_v3.varian ' +
             'LEFT OUTER JOIN covid.status_rawat_kmk ON covid.status_rawat_kmk.id_status_rawat = covid.covid_v3.status_rawat ' +
+            'LEFT OUTER JOIN covid.m_alatoksigen ON covid.m_alatoksigen.id_alat = covid.covid_v3.oksigen ' +
+            'LEFT OUTER JOIN covid.m_gejala_covid ON covid.m_gejala_covid.id_gejala = covid.covid_v3.gejala ' +
             'LEFT OUTER JOIN db_fasyankes.m_tempat_tidur ON db_fasyankes.m_tempat_tidur.id_tt = covid.covid_v3.status_isolasi ' 
 
         const sqlFilterValue = [
@@ -111,11 +142,12 @@ class LaporanCovid19Versi3 {
                         id: element['id_trans'],
                         noRM: element['no_rm'],
                         namaInisialPasien: element['nama_inisial'],
+                        tanggalLahir: dateFormat(element['tanggal_lahir'],'yyyy-mm-dd'),
                         jenisKelamin: {
                             id: element['jenis_kelamin_id'],
                             nama: element['jenis_kelamin_nama']
                         },
-                        tanggalLahir: dateFormat(element['tanggal_lahir'],'yyyy-mm-dd'),
+                        email: element['email'],
                         domisiliAlamat: {
                             kecamatan: {
                                 id: element['domisili_kecamatan_id'],
@@ -130,6 +162,7 @@ class LaporanCovid19Versi3 {
                                 nama: element['domisili_provinsi_nama']
                             }
                         },
+                        noTelp: element['no_telp'],
                         tanggalMasuk: tanggal_masuk,
                         pekerjaan: {
                             id: element['pekerjaan_id'],
@@ -138,6 +171,10 @@ class LaporanCovid19Versi3 {
                         jenisPasien: {
                             id: element['jenis_pasien_id'],
                             nama: element['jenis_pasien_nama']
+                        },
+                        varianCovid: {
+                            id: element['varian_covid_id'],
+                            nama: element['varian_covid_nama']
                         },
                         statusPasien: {
                             id: element['status_pasien_id'],
@@ -155,12 +192,69 @@ class LaporanCovid19Versi3 {
                             id: element['status_rawat_id'],
                             nama: element['status_rawat_nama']
                         },
+                        alatOksigen: {
+                            id: element['alat_oksigen_id'],
+                            nama: element['alat_oksigen_nama']
+                        },
                         saturasiOksigen: element['saturasi_oksigen'],
                         terapiOksigen: {
                             id: element['terapi_oksigen_id'],
                             nama: element['terapi_oksigen_nama']
                         },
-                        tanggalLapor: dateFormat(element['tanggal_lapor'],'yyyy-mm-dd hh:mm:ss')
+                        penyintas: {
+                            id: element['penyintas_id'],
+                            nama: element['penyintas_nama']
+                        },
+                        tanggalLapor: dateFormat(element['tanggal_lapor'],'yyyy-mm-dd hh:mm:ss'),
+                        kelompokGejala: {
+                            id: element['gejala_id'],
+                            nama: element['gejala_nama']
+                        },
+                        gejala: 
+                            {
+                                demam: {
+                                    id: element['gejala_demam']
+                                },
+                                batuk: {
+                                    id: element['gejala_batuk']
+                                },
+                                pilek: {
+                                    id: element['gejala_pilek']
+                                },
+                                sakitTenggorokan: {
+                                    id: element['gejala_sakittenggorokan']
+                                },
+                                sesakNapas: {
+                                    id: element['gejala_sesak']
+                                },
+                                lemas: {
+                                    id: element['gejala_lemas']
+                                },
+                                nyeriOtot: {
+                                    id: element['gejala_nyeriotot']
+                                },
+                                mualMuntah: {
+                                    id: element['gejala_mual']
+                                },
+                                diare: {
+                                    id: element['gejala_diare']
+                                },
+                                anosmia: {
+                                    id: element['gejala_anosmia']
+                                },
+                                napasCepat: {
+                                    id: element['napas_cepat']
+                                },
+                                frekNapas30KaliPerMenit: {
+                                    id: element['frek_napas']
+                                },
+                                distresPernapasanBerat: {
+                                    id: element['distress']
+                                },
+                                lainnya: {
+                                    id: element['gejala_lainnya']
+                                }
+                            }
                     })
                 })
                 callback(null, results)
@@ -189,6 +283,8 @@ class LaporanCovid19Versi3 {
                 'ELSE "Lainnya"' +
             'END as jenis_kelamin_nama,' +
             'covid.covid_v3.birthdate as tanggal_lahir,' +
+            'covid.covid_v3.email,' +
+            'covid.covid_v3.notelp as no_telp,' +
             'covid.kelompokumur.kelompok_umur as kelompok_umur,' +
             'covid.covid_v3.kecamatan as domisili_kecamatan_id,' +
             'reference.kecamatan.nama as domisili_kecamatan_nama,' +
@@ -201,6 +297,8 @@ class LaporanCovid19Versi3 {
             'covid.profesi.deskripsi as pekerjaan_nama,' +
             'covid.covid_v3.jenis_pasien as jenis_pasien_id,' +
             'covid.jenis_pasien.deskripsi as jenis_pasien_nama,' +
+            'covid.covid_v3.varian as varian_covid_id, ' +
+            'm_varian_covid.jenis_varian as varian_covid_nama, ' +
             'covid.covid_v3.status_rawat as status_pasien_id,' +
             'covid.status_rawat_kmk.status as status_pasien_nama ,' +
             'CASE ' +
@@ -216,6 +314,8 @@ class LaporanCovid19Versi3 {
             'END as status_coinsiden_nama,' +
             'covid.covid_v3.status_isolasi as status_rawat_id,' +
             'db_fasyankes.m_tempat_tidur.tt as status_rawat_nama,' +
+            'covid.covid_v3.alatoksigen as alat_oksigen_id,' +
+            'covid.m_alatoksigen.nama_alat as alat_oksigen_nama,' +
             'covid.covid_v3.saturasi as saturasi_oksigen,' +
             'covid.covid_v3.oksigen as terapi_oksigen_id,' +
             'CASE ' +
@@ -223,7 +323,29 @@ class LaporanCovid19Versi3 {
                 'WHEN covid.covid_v3.oksigen = "1" THEN "ya"' +
                 'ELSE "null"' +
             'END as terapi_oksigen_nama,' +
-            'covid.covid_v3.tgl_lapor as tanggal_lapor ' +
+            'covid.covid_v3.penyintas as penyintas_id,' +
+            'CASE ' +
+                'WHEN covid.covid_v3.penyintas = "0" THEN "tidak"' +
+                'WHEN covid.covid_v3.penyintas = "1" THEN "ya"' +
+                'ELSE "null"' +
+            'END as penyintas_nama,' +
+            'covid.covid_v3.tgl_lapor as tanggal_lapor,' +
+            'covid.covid_v3.gejala as gejala_id, ' +
+            'm_gejala_covid.deskripsi_gejala as gejala_nama,' +
+            'covid.covid_v3.gejala_demam,' +
+            'covid.covid_v3.gejala_batuk,' +
+            'covid.covid_v3.gejala_pilek,' +
+            'covid.covid_v3.gejala_sakittenggorokan,' +
+            'covid.covid_v3.gejala_sesak,' +
+            'covid.covid_v3.gejala_lemas,' +
+            'covid.covid_v3.gejala_nyeriotot,' +
+            'covid.covid_v3.gejala_mual,' +
+            'covid.covid_v3.gejala_diare,' +
+            'covid.covid_v3.gejala_anosmia,' +
+            'covid.covid_v3.napas_cepat,' +
+            'covid.covid_v3.frek_napas,' +
+            'covid.covid_v3.distress,' +
+            'covid.covid_v3.gejala_lainnya ' +
         'FROM ' +
             'covid.covid_v3 ' +
             'LEFT OUTER JOIN covid.kelompokumur ON covid.kelompokumur.id_umur = covid.covid_v3.age ' +
@@ -232,7 +354,10 @@ class LaporanCovid19Versi3 {
             'LEFT OUTER JOIN reference.provinsi ON reference.provinsi.id = reference.kab_kota.provinsi_id ' +
             'LEFT OUTER JOIN covid.profesi ON covid.profesi.id_profesi = covid.covid_v3.profesi ' +
             'LEFT OUTER JOIN covid.jenis_pasien ON covid.jenis_pasien.id_jenis_pasien = covid.covid_v3.jenis_pasien ' +
+            'LEFT OUTER JOIN covid.m_varian_covid ON covid.m_varian_covid.id = covid.covid_v3.varian ' +
             'LEFT OUTER JOIN covid.status_rawat_kmk ON covid.status_rawat_kmk.id_status_rawat = covid.covid_v3.status_rawat ' +
+            'LEFT OUTER JOIN covid.m_alatoksigen ON covid.m_alatoksigen.id_alat = covid.covid_v3.oksigen ' +
+            'LEFT OUTER JOIN covid.m_gejala_covid ON covid.m_gejala_covid.id_gejala = covid.covid_v3.gejala ' +
             'LEFT OUTER JOIN db_fasyankes.m_tempat_tidur ON db_fasyankes.m_tempat_tidur.id_tt = covid.covid_v3.status_isolasi ' +
         'WHERE covid.covid_v3.koders = ? and covid.covid_v3.id_trans = ? '
 
@@ -257,11 +382,12 @@ class LaporanCovid19Versi3 {
                         id: element['id_trans'],
                         noRM: element['no_rm'],
                         namaInisialPasien: element['nama_inisial'],
+                        tanggalLahir: dateFormat(element['tanggal_lahir'],'yyyy-mm-dd'),
                         jenisKelamin: {
                             id: element['jenis_kelamin_id'],
                             nama: element['jenis_kelamin_nama']
                         },
-                        tanggalLahir: dateFormat(element['tanggal_lahir'],'yyyy-mm-dd'),
+                        email: element['email'],
                         domisiliAlamat: {
                             kecamatan: {
                                 id: element['domisili_kecamatan_id'],
@@ -276,6 +402,7 @@ class LaporanCovid19Versi3 {
                                 nama: element['domisili_provinsi_nama']
                             }
                         },
+                        noTelp: element['no_telp'],
                         tanggalMasuk: tanggal_masuk,
                         pekerjaan: {
                             id: element['pekerjaan_id'],
@@ -284,6 +411,10 @@ class LaporanCovid19Versi3 {
                         jenisPasien: {
                             id: element['jenis_pasien_id'],
                             nama: element['jenis_pasien_nama']
+                        },
+                        varianCovid: {
+                            id: element['varian_covid_id'],
+                            nama: element['varian_covid_nama']
                         },
                         statusPasien: {
                             id: element['status_pasien_id'],
@@ -301,12 +432,69 @@ class LaporanCovid19Versi3 {
                             id: element['status_rawat_id'],
                             nama: element['status_rawat_nama']
                         },
+                        alatOksigen: {
+                            id: element['alat_oksigen_id'],
+                            nama: element['alat_oksigen_nama']
+                        },
                         saturasiOksigen: element['saturasi_oksigen'],
                         terapiOksigen: {
                             id: element['terapi_oksigen_id'],
                             nama: element['terapi_oksigen_nama']
                         },
-                        tanggalLapor: dateFormat(element['tanggal_lapor'],'yyyy-mm-dd hh:mm:ss')
+                        penyintas: {
+                            id: element['penyintas_id'],
+                            nama: element['penyintas_nama']
+                        },
+                        tanggalLapor: dateFormat(element['tanggal_lapor'],'yyyy-mm-dd hh:mm:ss'),
+                        kelompokGejala: {
+                            id: element['gejala_id'],
+                            nama: element['gejala_nama']
+                        },
+                        gejala: 
+                            {
+                                demam: {
+                                    id: element['gejala_demam']
+                                },
+                                batuk: {
+                                    id: element['gejala_batuk']
+                                },
+                                pilek: {
+                                    id: element['gejala_pilek']
+                                },
+                                sakitTenggorokan: {
+                                    id: element['gejala_sakittenggorokan']
+                                },
+                                sesakNapas: {
+                                    id: element['gejala_sesak']
+                                },
+                                lemas: {
+                                    id: element['gejala_lemas']
+                                },
+                                nyeriOtot: {
+                                    id: element['gejala_nyeriotot']
+                                },
+                                mualMuntah: {
+                                    id: element['gejala_mual']
+                                },
+                                diare: {
+                                    id: element['gejala_diare']
+                                },
+                                anosmia: {
+                                    id: element['gejala_anosmia']
+                                },
+                                napasCepat: {
+                                    id: element['napas_cepat']
+                                },
+                                frekNapas30KaliPerMenit: {
+                                    id: element['frek_napas']
+                                },
+                                distresPernapasanBerat: {
+                                    id: element['distress']
+                                },
+                                lainnya: {
+                                    id: element['gejala_lainnya']
+                                }
+                            }
                     })
                 })
                 callback(null, results)
