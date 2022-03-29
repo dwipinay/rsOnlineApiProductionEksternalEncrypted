@@ -359,7 +359,7 @@ class LaporanCovid19Versi3 {
             'LEFT OUTER JOIN covid.m_alatoksigen ON covid.m_alatoksigen.id_alat = covid.covid_v3.oksigen ' +
             'LEFT OUTER JOIN covid.m_gejala_covid ON covid.m_gejala_covid.id_gejala = covid.covid_v3.gejala ' +
             'LEFT OUTER JOIN db_fasyankes.m_tempat_tidur ON db_fasyankes.m_tempat_tidur.id_tt = covid.covid_v3.status_isolasi ' +
-        'WHERE covid.covid_v3.koders = ? and covid.covid_v3.id_trans = ? '
+        'WHERE covid.covid_v3.tglkeluar = "0000-00-00" and covid.covid_v3.koders = ? and covid.covid_v3.id_trans = ? '
 
         const sqlFilterValue = [
             user.kode_rs,
