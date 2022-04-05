@@ -363,11 +363,26 @@ class LaporanCovid19Versi3Controller {
         if (req.body.alatOksigenId == null) {
             terapiOksigenId = 0
         } else { terapiOksigenId = 1 }
+        // checking kewarganegaraan
+        // ##################################################################################################
+        if (req.body.kewarganegaraanId != 'ID' && req.body.noPassport == null) {
+            res.status(422).send({
+                status: false,
+                message: `noPassport ${req.body.noPassport} tidak diijinkan untuk kewarganegaraanId ${req.body.kewarganegaraanId}`
+            })
+            return
+        }
+        let nik = null
+        if (req.body.kewarganegaraanId == 'ID') {
+            nik = req.body.nik
+        } else if (req.body.kewarganegaraanId != 'ID') {
+            nik = req.body.noPassport
+        }
         // Assigning data for inserting into DB
         // ##################################################################################################
         const data = {
             kewarganegaraanId: req.body.kewarganegaraanId,
-            nik: req.body.nik,
+            nik: nik,
             noPassport: req.body.noPassport,
             asalPasienId: req.body.asalPasienId,
             kodeRS: req.user.kode_rs,
