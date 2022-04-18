@@ -222,7 +222,15 @@ class LaporanCovid19Versi3Controller {
                     message: `Hanya null alatOksigenId yang diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
                 })
                 return
-            }  
+            }
+            let statusRawatId = [0,28,29,32,33]
+            if(statusRawatId.indexOf(parseInt(req.body.statusRawatId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `statusRawatId ${req.body.statusRawatId} tidak diijinkan kelompokGejalaId ${req.body.kelompokGejalaId }`
+                })
+                return
+            }
         } 
         // Jika bergejala, tanpa klinis pnemonia
         // ###################################################################################################
@@ -249,6 +257,14 @@ class LaporanCovid19Versi3Controller {
                 res.status(422).send({
                     status: false,
                     message: `Hanya null alatOksigenId yang diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
+                })
+                return
+            }
+            let statusRawatId = [0,28,29,32,33]
+            if(statusRawatId.indexOf(parseInt(req.body.statusRawatId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `statusRawatId ${req.body.statusRawatId} tidak diijinkan kelompokGejalaId ${req.body.kelompokGejalaId }`
                 })
                 return
             }
@@ -282,6 +298,14 @@ class LaporanCovid19Versi3Controller {
                 })
                 return
             }
+            let statusRawatId = [28,29,32,33]
+            if(statusRawatId.indexOf(parseInt(req.body.statusRawatId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `statusRawatId ${req.body.statusRawatId} tidak diijinkan kelompokGejalaId ${req.body.kelompokGejalaId }`
+                })
+                return
+            }
         } 
         // Jika bergejala, dengan tanda klinis pneumonia berat
         // ###################################################################################################
@@ -309,6 +333,14 @@ class LaporanCovid19Versi3Controller {
                 res.status(422).send({
                     status: false,
                     message: `alatOksigenId ${req.body.alatOksigenId} tidak diijinkan untuk kelompokGejalaId ${req.body.kelompokGejalaId }`
+                })
+                return
+            }
+            let statusRawatId = [24,25,26,27,30,31]
+            if(statusRawatId.indexOf(parseInt(req.body.statusRawatId)) < 0) {
+                res.status(422).send({
+                    status: false,
+                    message: `statusRawatId ${req.body.statusRawatId} tidak diijinkan kelompokGejalaId ${req.body.kelompokGejalaId }`
                 })
                 return
             }
