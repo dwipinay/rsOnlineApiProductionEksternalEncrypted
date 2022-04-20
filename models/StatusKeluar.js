@@ -5,11 +5,11 @@ class StatusKeluar {
     getAll(user, callback) {
         const database = new Database(pool)
         const sql = 'SELECT ' +
-        'covid.dischargestatus.id_status as id, '+ 
-        'covid.dischargestatus.status as nama ' +
-        'FROM covid.dischargestatus ' +
-        'WHERE covid.dischargestatus.id_status != 0 ' +
-        'ORDER BY covid.dischargestatus.id_status'
+        'covid.dischargestatus_v3.id_status as id, '+ 
+        'covid.dischargestatus_v3.status as nama ' +
+        'FROM covid.dischargestatus_v3 ' +
+        'WHERE covid.dischargestatus_v3.id_status != 0 ' +
+        'ORDER BY covid.dischargestatus_v3.id_status'
 
         database.query(sql)
         .then(
