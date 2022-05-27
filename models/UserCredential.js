@@ -46,9 +46,16 @@ class UserCredential {
                     }
                 }))
                 
-                const message = `<p>Yth. ${credential.fullName}</p> 
-                <p>Berikut kami informasikan password untuk Api RS Online : <b>${credential.plainPassword}</b></p>
-                <p>Untuk dokumentasi production api rs online dapat dilihat di http://202.70.136.24:3020/apidocrsonliners/</p>`
+                let message = null
+                if (credential.faskesId != null) {
+                    message = `<p>Yth. ${credential.fullName}</p> 
+                    <p>Berikut kami informasikan password untuk Api RS Online : <b>${credential.plainPassword}</b></p>
+                    <p>Untuk dokumentasi production api rs online dapat dilihat di http://202.70.136.24:3020/apidocrsonliners/</p>`
+                } else {
+                    message = `<p>Yth. ${credential.fullName}</p> 
+                    <p>Berikut kami informasikan password untuk Api RS Online : <b>${credential.plainPassword}</b></p>
+                    <p>Untuk dokumentasi production api rs online dapat dilihat di http://202.70.136.24:3020/apidoc2022021621/</p>`
+                }
                 
                 var mailOptions = {
                     from: 'infomonev.yankes@gmail.com',
