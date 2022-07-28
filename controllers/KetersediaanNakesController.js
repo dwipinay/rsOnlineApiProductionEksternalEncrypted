@@ -56,8 +56,8 @@ class KetersediaanAlkes {
             no_sip: Joi.string().required().allow('').allow(null),
             jenis_nakes_id: Joi.number().required(),
             jenis_nakes_nama: Joi.string().required(),
-            sub_kategori_nakes_id: Joi.number().required(),
-            sub_kategori_nakes_nama: Joi.string().required()
+            sub_kategori_nakes_id: Joi.number().required().allow(null),
+            sub_kategori_nakes_nama: Joi.string().required().allow(null)
         });
 
         const { error, value } =  schema.validate(req.body)
@@ -108,8 +108,8 @@ class KetersediaanAlkes {
             no_sip: Joi.string().required().allow('').allow(null),
             jenis_nakes_id: Joi.number().required(),
             jenis_nakes_nama: Joi.string().required(),
-            sub_kategori_nakes_id: Joi.number().required(),
-            sub_kategori_nakes_nama: Joi.string().required(),
+            sub_kategori_nakes_id: Joi.number().required().allow(null),
+            sub_kategori_nakes_nama: Joi.string().required().allow(null),
             is_active: Joi.number().required()
         });
 
