@@ -23,6 +23,7 @@ const RumahSakitController = require('../controllers/RumahSakitController')
 const KetersediaanTempatTidurController = require('../controllers/KetersediaanTempatTidurController')
 const KetersediaanNakesController = require('../controllers/KetersediaanNakesController')
 const KetersediaanAlkesController = require('../controllers/KetersediaanAlkesController')
+const KetersediaanPelayananController = require('../controllers/KetersediaanPelayananController')
 const KlaimBPJS1Controller = require('../controllers/KlaimBPJS1Controller')
 const KlaimBPJS2Controller = require('../controllers/KlaimBPJS2Controller')
 const KlaimBPJS3Controller = require('../controllers/KlaimBPJS3Controller')
@@ -79,6 +80,7 @@ const RumahSakitControllerObject = new RumahSakitController()
 const KetersediaanTempatTidurControllerObject = new KetersediaanTempatTidurController()
 const KetersediaanNakesControllerObject = new KetersediaanNakesController()
 const KetersediaanAlkesControllerObject = new KetersediaanAlkesController()
+const KetersediaanPelayananControllerObject = new KetersediaanPelayananController()
 const KlaimBPJS1ControllerObject = new KlaimBPJS1Controller()
 const KlaimBPJS2ControllerObject = new KlaimBPJS2Controller()
 const KlaimBPJS3ControllerObject = new KlaimBPJS3Controller()
@@ -157,6 +159,12 @@ router.get('/api/ketersediaanalkes',
     userIPControllerObject.authenticateIP,
     userTokenObject.authenticateToken, 
     KetersediaanAlkesControllerObject.index)
+
+// Ketersediaan Pelayanan
+router.get('/api/ketersediaanpelayanan', 
+    userIPControllerObject.authenticateIP,
+    userTokenObject.authenticateToken, 
+    KetersediaanPelayananControllerObject.index)
 
 // Klaim BPJS 1
 router.get('/api/klaimbpjs1', 
