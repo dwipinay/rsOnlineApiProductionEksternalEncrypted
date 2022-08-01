@@ -7,7 +7,7 @@ class KetersediaanPelayanan {
         const sqlUserScope = 'SELECT db_api_auth.scope.id ' +
             'FROM db_api_auth.scope ' +
             'WHERE db_api_auth.scope.user_id = ? ' +
-            'AND db_api_auth.scope.endpoint_id = 4'
+            'AND db_api_auth.scope.endpoint_id = 6'
 
         const sqlFilterValueUserScope = [req.user.id]
 
