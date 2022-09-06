@@ -189,6 +189,8 @@ class RumahSakit {
                 'ON db_fasyankes.m_kelas.id_kelas = db_fasyankes.`data`.KLS_RS ' +
                 'INNER JOIN db_fasyankes.m_kepemilikan ' +
                 'ON db_fasyankes.m_kepemilikan.id_kepemilikan = db_fasyankes.`data`.PENYELENGGARA ' +
+                'INNER JOIN db_fasyankes.m_blu ' +
+                'ON db_fasyankes.m_blu.id_blu = db_fasyankes.`data`.blu ' + 
                 'WHERE db_fasyankes.`data`.Propinsi = ? '
                 
                 const sqlFilterValue = [id]
