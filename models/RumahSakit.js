@@ -46,7 +46,7 @@ class RumahSakit {
                     'INNER JOIN db_fasyankes.m_blu ' +
                     'ON db_fasyankes.m_blu.id_blu = db_fasyankes.`data`.blu ' + 
                     'INNER JOIN db_fasyankes.koordinat ' +
-                    'ON db_fasyankes.propinsi = db_fasyankes.koordinat '
+                    'ON db_fasyankes.`data`.propinsi = db_fasyankes.koordinat.koders '
 
                 const sqlOrder = 'ORDER BY db_fasyankes.propinsi.propinsi_kode, db_fasyankes.`kab/kota`.link'
 
