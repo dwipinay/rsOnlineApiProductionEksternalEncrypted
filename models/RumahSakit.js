@@ -178,7 +178,10 @@ class RumahSakit {
                 'db_fasyankes.`data`.alamat, ' +
                 'db_fasyankes.`kab/kota`.`KAB/KOTA` AS kab_kota, ' +
                 'db_fasyankes.propinsi.propinsi_name AS propinsi, ' +
-                'db_fasyankes.`data`.TELEPON AS telepon ' +
+                'db_fasyankes.`data`.TELEPON AS telepon, ' +
+                'db_fasyankes.m_blu.blu as statusBLU ' +
+                'db_fasyankes.koordinat.long, ' +
+                'db_fasyankes.koordinat.alt ' +
                 'FROM db_fasyankes.`data` INNER JOIN db_fasyankes.propinsi ' +
                 'ON db_fasyankes.propinsi.propinsi_kode = db_fasyankes.`data`.usrpwd2 ' +
                 'INNER JOIN db_fasyankes.`kab/kota` ' +
@@ -191,6 +194,8 @@ class RumahSakit {
                 'ON db_fasyankes.m_kepemilikan.id_kepemilikan = db_fasyankes.`data`.PENYELENGGARA ' +
                 'INNER JOIN db_fasyankes.m_blu ' +
                 'ON db_fasyankes.m_blu.id_blu = db_fasyankes.`data`.blu ' + 
+                'INNER JOIN db_fasyankes.koordinat ' +
+                'ON db_fasyankes.`data`.propinsi = db_fasyankes.koordinat.koders ' +
                 'WHERE db_fasyankes.`data`.Propinsi = ? '
                 
                 const sqlFilterValue = [id]
