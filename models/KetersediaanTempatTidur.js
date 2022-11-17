@@ -20,6 +20,7 @@ class KetersediaanTempatTidur {
                 }
 
                 const kode_propinsi = req.query.kode_propinsi || null
+                const kode_kab_kota = req.query.kode_kab_kota || null
                 const id_tt = req.query.id_tt || null
                 const tgl_update = req.query.tgl_update || null
                 const kode_rs = req.query.kode_rs || null
@@ -47,6 +48,11 @@ class KetersediaanTempatTidur {
                 if (kode_propinsi != null) {
                     filter.push("db_fasyankes.`data`.`usrpwd2` = ?")
                     sqlFilterValue.push(kode_propinsi.concat('prop'))
+                }
+
+                if (kode_kab_kota != null) {
+                    filter.push("db_fasyankes.`data`.`link` = ?")
+                    sqlFilterValue.push(kode_kab_kota)
                 }
 
                 if (kode_rs != null) {
