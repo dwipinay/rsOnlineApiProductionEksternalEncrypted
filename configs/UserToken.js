@@ -4,7 +4,7 @@ class UserToken {
     authenticateToken(request, res, next) {
         const authHeader = request.headers['authorization']
         const token = authHeader && authHeader.split(' ')[1]
-        if (token == null) return res.status(401).send({
+        if (token == null) return res.status(403).send({
             status: false,
             message: 'Unauthorized'
         })
