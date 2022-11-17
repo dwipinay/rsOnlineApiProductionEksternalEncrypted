@@ -170,7 +170,7 @@ class userCredentialController {
                 return
             }
             if(!result.length) {
-                res.status(401).send({
+                res.status(403).send({
                     status:false,
                     message: "Unauthorized"
                 })
@@ -178,7 +178,7 @@ class userCredentialController {
             }
             bcrypt.compare(req.body.password, result[0].password, (err2, res2) => {
                 if(res2 == false) {
-                    res.status(401).send({
+                    res.status(403).send({
                         status: false,
                         message: 'Unauthorized'
                     })
