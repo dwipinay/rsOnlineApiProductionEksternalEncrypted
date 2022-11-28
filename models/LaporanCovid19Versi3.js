@@ -1249,16 +1249,27 @@ class LaporanCovid19Versi3 {
     }
 
     getNIKData(args) {
-        const endPoint = 'https://ws-direktori.kemkes.go.id/sampel_yankes/1/covid_api/api/sampel_feed/nik_yankes'
+        // const endPoint = 'https://ws-direktori.kemkes.go.id/sampel_yankes/1/covid_api/api/sampel_feed/nik_yankes'
+
+        // const config = {
+        //     headers: {
+        //         'apikey': 'eyJ4NXQiOiJOVGRtWmpNNFpEazNOalkwWXpjNU1tWm1PRGd3TVRFM01XWXdOREU1TVdSbFpEZzROemM0WkE9PSIsImtpZCI6ImdhdGV3YXlfY2VydGlmaWNhdGVfYWxpYXMiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ1c2VyX3lhbmtlc0BjYXJib24uc3VwZXIiLCJhcHBsaWNhdGlvbiI6eyJvd25lciI6InVzZXJfeWFua2VzIiwidGllclF1b3RhVHlwZSI6bnVsbCwidGllciI6IlVubGltaXRlZCIsIm5hbWUiOiJyc29ubGluZSIsImlkIjo1OCwidXVpZCI6ImQ3OTRkYjkzLWU5Y2EtNDQxZS1hM2QxLTNlNDViMTdjZWZhOCJ9LCJpc3MiOiJodHRwczpcL1wvd3NtLWRpcmVrdG9yaS5rZW1rZXMuZ28uaWQ6NDQzXC9vYXV0aDJcL3Rva2VuIiwidGllckluZm8iOnsiVW5saW1pdGVkIjp7InRpZXJRdW90YVR5cGUiOiJyZXF1ZXN0Q291bnQiLCJncmFwaFFMTWF4Q29tcGxleGl0eSI6MCwiZ3JhcGhRTE1heERlcHRoIjowLCJzdG9wT25RdW90YVJlYWNoIjp0cnVlLCJzcGlrZUFycmVzdExpbWl0IjowLCJzcGlrZUFycmVzdFVuaXQiOm51bGx9fSwia2V5dHlwZSI6IlBST0RVQ1RJT04iLCJwZXJtaXR0ZWRSZWZlcmVyIjoiIiwic3Vic2NyaWJlZEFQSXMiOlt7InN1YnNjcmliZXJUZW5hbnREb21haW4iOiJjYXJib24uc3VwZXIiLCJuYW1lIjoic2FtcGVsX3lhbmtlcyIsImNvbnRleHQiOiJcL3NhbXBlbF95YW5rZXNcLzEiLCJwdWJsaXNoZXIiOiJhZG1pbiIsInZlcnNpb24iOiIxIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9XSwicGVybWl0dGVkSVAiOiIiLCJpYXQiOjE2NDIxNjQ2NDQsImp0aSI6IjFhNDZlYjRlLWU4MTktNGI1Zi05MGM0LTJkYzliNDI3YTJhOCJ9.LoXLXsMXzuV-P5osuCo6q8HiPO42ZNh-v_XB6XNpvLyvmYl2VbOSPJLo8Gycdcu86GLHSO35g4MnNvE8EqejbFmaSnl5e-9IvcYJKexOkGQWvm4MMM355SKD9U05riSa6kjUANV2403SRalYkrUVSq9vR_q-Pv6_HpSmc78Tv7T7WarkEQ7yY7CgycNJO0n5AOBpoJ4yx07VchAB4rZSQyLnVFOEqw4ndWoDJU68-G9J-mgsHFDnZiuyw6MTJ2MZvSOHDGCX6PkFGFygYlCXIFJ3brwtuwWyWzgkueZA9JfPA5eG_os0GfcfvGo4pxx7Do9a2e3qbQUjrC6_fECWRw==',
+        //         'Content-Type': 'application/json'
+        //     },
+        //     httpsAgent: new https.Agent({
+        //         rejectUnauthorized: false
+        //     })
+        // }
+
+        const endPoint = 'http://103.107.103.164/covid_api/api/sampel_feed/nik_yankes'
+        
         const config = {
             headers: {
-                'apikey': 'eyJ4NXQiOiJOVGRtWmpNNFpEazNOalkwWXpjNU1tWm1PRGd3TVRFM01XWXdOREU1TVdSbFpEZzROemM0WkE9PSIsImtpZCI6ImdhdGV3YXlfY2VydGlmaWNhdGVfYWxpYXMiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ1c2VyX3lhbmtlc0BjYXJib24uc3VwZXIiLCJhcHBsaWNhdGlvbiI6eyJvd25lciI6InVzZXJfeWFua2VzIiwidGllclF1b3RhVHlwZSI6bnVsbCwidGllciI6IlVubGltaXRlZCIsIm5hbWUiOiJyc29ubGluZSIsImlkIjo1OCwidXVpZCI6ImQ3OTRkYjkzLWU5Y2EtNDQxZS1hM2QxLTNlNDViMTdjZWZhOCJ9LCJpc3MiOiJodHRwczpcL1wvd3NtLWRpcmVrdG9yaS5rZW1rZXMuZ28uaWQ6NDQzXC9vYXV0aDJcL3Rva2VuIiwidGllckluZm8iOnsiVW5saW1pdGVkIjp7InRpZXJRdW90YVR5cGUiOiJyZXF1ZXN0Q291bnQiLCJncmFwaFFMTWF4Q29tcGxleGl0eSI6MCwiZ3JhcGhRTE1heERlcHRoIjowLCJzdG9wT25RdW90YVJlYWNoIjp0cnVlLCJzcGlrZUFycmVzdExpbWl0IjowLCJzcGlrZUFycmVzdFVuaXQiOm51bGx9fSwia2V5dHlwZSI6IlBST0RVQ1RJT04iLCJwZXJtaXR0ZWRSZWZlcmVyIjoiIiwic3Vic2NyaWJlZEFQSXMiOlt7InN1YnNjcmliZXJUZW5hbnREb21haW4iOiJjYXJib24uc3VwZXIiLCJuYW1lIjoic2FtcGVsX3lhbmtlcyIsImNvbnRleHQiOiJcL3NhbXBlbF95YW5rZXNcLzEiLCJwdWJsaXNoZXIiOiJhZG1pbiIsInZlcnNpb24iOiIxIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9XSwicGVybWl0dGVkSVAiOiIiLCJpYXQiOjE2NDIxNjQ2NDQsImp0aSI6IjFhNDZlYjRlLWU4MTktNGI1Zi05MGM0LTJkYzliNDI3YTJhOCJ9.LoXLXsMXzuV-P5osuCo6q8HiPO42ZNh-v_XB6XNpvLyvmYl2VbOSPJLo8Gycdcu86GLHSO35g4MnNvE8EqejbFmaSnl5e-9IvcYJKexOkGQWvm4MMM355SKD9U05riSa6kjUANV2403SRalYkrUVSq9vR_q-Pv6_HpSmc78Tv7T7WarkEQ7yY7CgycNJO0n5AOBpoJ4yx07VchAB4rZSQyLnVFOEqw4ndWoDJU68-G9J-mgsHFDnZiuyw6MTJ2MZvSOHDGCX6PkFGFygYlCXIFJ3brwtuwWyWzgkueZA9JfPA5eG_os0GfcfvGo4pxx7Do9a2e3qbQUjrC6_fECWRw==',
+                'Api-Kemkes': 'B4PY6bkQ34vLsx2Ma8VKkq7QV4fX7Fc4t5j5mkzqLE6dWe36XkDtJeTxqU3uUnXAUD8EHJ5bCZTUTsLZ',
                 'Content-Type': 'application/json'
-            },
-            httpsAgent: new https.Agent({
-                rejectUnauthorized: false
-            })
+            }   
         }
+
         const body = {
             "name":"yankes",
             "pass":"hPkRnUrWtYw3y5A8DaFdJfMhQmSpUsXuZw4z6B9E",
