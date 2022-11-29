@@ -54,6 +54,7 @@ const KelompokGejalaController = require('../controllers/KelompokGejalaControlle
 const JenisPemeriksaanLabController = require('../controllers/JenisPemeriksaanLabController')
 const PenyebabKematianController = require('../controllers/PenyebabKematianController')
 const StatusPasienSaatMeninggalController = require('../controllers/StatusPasienSaatMeninggalController')
+const HospitalController = require('../controllers/HospitalController')
 const UserToken = require('../configs/UserToken')
 
 // Instance Class
@@ -110,6 +111,7 @@ const JenisVaksinControllerObject = new JenisVaksinController()
 const KelompokGejalaControllerObject = new KelompokGejalaController()
 const JenisPemeriksaanLabControllerObject = new JenisPemeriksaanLabController()
 const PenyebabKematianControllerObject = new PenyebabKematianController()
+const HospitalControllerObject = new HospitalController()
 
 // Auth
 router.post('/api/tasjil', 
@@ -135,6 +137,12 @@ router.get('/api/rumahsakit/:id',
     userIPControllerObject.authenticateIP,
     userTokenObject.authenticateToken,
     RumahSakitControllerObject.show)
+
+// Hospital
+router.get('/api/hospital', 
+    userIPControllerObject.authenticateIP,
+    userTokenObject.authenticateToken,
+    HospitalControllerObject.index)
 
 // Ketersediaan Tempat Tidur
 router.get('/api/ketersediaantempattidur', 
