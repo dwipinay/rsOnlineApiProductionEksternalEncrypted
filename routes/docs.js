@@ -7,6 +7,8 @@ const apiDoc2022052021 = require('../documentations/apiDoc2022052021.json')
 const apiDoc2022111715 = require('../documentations/apiDoc2022111715.json')
 const apiDocNakes = require('../documentations/apiDocNakes.json')
 const apiDocRSOnlineRS = require('../documentations/apiDocRSOnlineRS.json')
+const apiDoc2022122910 = require('../documentations/apiDoc2022122910.json')
+
 
 router.use('/apidoc2022021621', swaggerUi.serve, (req, res) => {
     let html = swaggerUi.generateHTML(apiDoc2022021621);
@@ -20,6 +22,11 @@ router.use('/apiDoc2022111715', swaggerUi.serve, (req, res) => {
 
 router.use('/apidoc2022052021', swaggerUi.serve, (req, res) => {
     let html = swaggerUi.generateHTML(apiDoc2022052021);
+    res.send(html);
+})
+
+router.use('/apiDoc2022122910', swaggerUi.serve, (req, res) => {
+    let html = swaggerUi.generateHTML(apiDoc2022122910);
     res.send(html);
 })
 
