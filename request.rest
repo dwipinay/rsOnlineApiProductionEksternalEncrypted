@@ -1,9 +1,9 @@
 ### Token Create
-POST http://202.70.136.24:3020/api/login
+POST http://127.0.0.1:3020/api/login
 Content-Type: application/json
 
 {
-    "email": "kotakelektronik@gmail.com",
+    "userName": "kotakelektronik@gmail.com",
     "password": "p5fuNGds"
 }
 
@@ -16,5 +16,9 @@ GET http://localhost:3020/api/rumahsakit/1108017
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImN1bWFkd2lwQGdtYWlsLmNvbSIsImlhdCI6MTYzNzI4ODkyMywiZXhwIjoxNjM3Mjg5NTIzfQ.iB_rfRHDek5LFH9O1IjlQyie23KeS4TZ0TAWRCt48P0
 
 ### Display all hospital resource
-GET http://202.70.136.24:3020/api/hospital
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uYW1lIjoia290YWtlbGVrdHJvbmlrQGdtYWlsLmNvbSIsImtvZGVfcnMiOm51bGwsImlhdCI6MTY2OTY5MjkyNywiZXhwIjoxNjY5NjkzNTI3fQ.m42092cDLqCV9Hs5patO4e7zaxG-CWVXi6bzfa2z8FM
+GET http://127.0.0.1:3020/api/hospital
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uYW1lIjoia290YWtlbGVrdHJvbmlrQGdtYWlsLmNvbSIsImtvZGVfcnMiOm51bGwsImlhdCI6MTY3MjI5NDc1MSwiZXhwIjoxNjcyMjk1MzUxfQ.yu7_GYjzFyYLvOvdRGNuREEe15wqM3lu4lJlIEadEf8
+
+### Display Pelayanan
+GET http://127.0.0.1:3020/api/pelayanan
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uYW1lIjoia290YWtlbGVrdHJvbmlrQGdtYWlsLmNvbSIsImtvZGVfcnMiOm51bGwsImlhdCI6MTY3MjI5NDc1MSwiZXhwIjoxNjcyMjk1MzUxfQ.yu7_GYjzFyYLvOvdRGNuREEe15wqM3lu4lJlIEadEf8

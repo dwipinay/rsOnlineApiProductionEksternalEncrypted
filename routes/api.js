@@ -55,6 +55,7 @@ const JenisPemeriksaanLabController = require('../controllers/JenisPemeriksaanLa
 const PenyebabKematianController = require('../controllers/PenyebabKematianController')
 const StatusPasienSaatMeninggalController = require('../controllers/StatusPasienSaatMeninggalController')
 const HospitalController = require('../controllers/HospitalController')
+const PelayananController = require('../controllers/PelayananController')
 const UserToken = require('../configs/UserToken')
 
 // Instance Class
@@ -112,6 +113,7 @@ const KelompokGejalaControllerObject = new KelompokGejalaController()
 const JenisPemeriksaanLabControllerObject = new JenisPemeriksaanLabController()
 const PenyebabKematianControllerObject = new PenyebabKematianController()
 const HospitalControllerObject = new HospitalController()
+const PelayananControllerObject = new PelayananController()
 
 // Auth
 router.post('/api/tasjil', 
@@ -470,6 +472,13 @@ router.get('/api/alatoksigen',
     userIPControllerObject.authenticateIP,
     userTokenObject.authenticateToken,
     AlatOksigenControllerObject.index)
+
+// Pelayanan
+router.get('/api/pelayanan',
+    userIPControllerObject.authenticateIP,
+    userTokenObject.authenticateToken,
+    PelayananControllerObject.index
+)
 
 router.use('/api', (req, res) => {
     res.status(404).send({
