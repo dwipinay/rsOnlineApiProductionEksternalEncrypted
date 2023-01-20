@@ -9,7 +9,7 @@ Content-Type: application/json
 
 ### Display all rumah sakit resource
 GET http://localhost:3020/api/rumahsakit?nama=si
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImN1bWFkd2lwQGdtYWlsLmNvbSIsImlhdCI6MTYzNjM3NjczOCwiZXhwIjoxNjM2Mzc3MzM4fQ.Mw444LfMFlWvpCHHdb5qYSl1HsYtAPuT9toZVEzd5k0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uYW1lIjoia290YWtlbGVrdHJvbmlrQGdtYWlsLmNvbSIsImtvZGVfcnMiOm51bGwsImlhdCI6MTY3NDE5NzQ4NiwiZXhwIjoxNjc0MTk4MDg2fQ.M7K5Z0N6aMR0RBELFRj2o3tkqmsQGtOMquMOAl7z9ss
 
 ### Display the specific rumah sakit resource
 GET http://localhost:3020/api/rumahsakit/1108017
@@ -17,7 +17,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImN1bWFkd
 
 ### Display all hospital resource
 GET http://127.0.0.1:3020/api/hospital
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uYW1lIjoia290YWtlbGVrdHJvbmlrQGdtYWlsLmNvbSIsImtvZGVfcnMiOm51bGwsImlhdCI6MTY3MjI5NDc1MSwiZXhwIjoxNjcyMjk1MzUxfQ.yu7_GYjzFyYLvOvdRGNuREEe15wqM3lu4lJlIEadEf8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uYW1lIjoia290YWtlbGVrdHJvbmlrQGdtYWlsLmNvbSIsImtvZGVfcnMiOm51bGwsImlhdCI6MTY3NDE5NzY1NiwiZXhwIjoxNjc0MTk4MjU2fQ.MEHOHxoYmMmWJka29HJAydza-nHo_hEL1R-KkFn1oCk
 
 ### Display Pelayanan
 GET http://127.0.0.1:3020/api/pelayanan
