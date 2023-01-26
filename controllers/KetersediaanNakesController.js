@@ -52,6 +52,7 @@ class KetersediaanAlkes {
             biodata_id: Joi.number().required(),
             kode_rs: Joi.string().required(),
             nama: Joi.string().required(),
+            nik: Joi.string().required(),
             no_str: Joi.string().required().allow('').allow(null),
             no_sip: Joi.string().required().allow('').allow(null),
             jenis_nakes_id: Joi.number().required(),
@@ -74,6 +75,7 @@ class KetersediaanAlkes {
             biodata_id: req.body.biodata_id,
             kode_rs: req.body.kode_rs,
             nama: req.body.nama,
+            nik: req.body.nik,
             no_str: req.body.no_str,
             no_sip: req.body.no_sip,
             jenis_nakes_id: req.body.jenis_nakes_id,
@@ -104,6 +106,7 @@ class KetersediaanAlkes {
         const schema = Joi.object({
             biodata_id: Joi.number().required(),
             nama: Joi.string().required(),
+            nik: Joi.string().required(),
             no_str: Joi.string().required().allow('').allow(null),
             no_sip: Joi.string().required().allow('').allow(null),
             jenis_nakes_id: Joi.number().required(),
@@ -125,6 +128,7 @@ class KetersediaanAlkes {
         const data = {
             biodata_id: req.body.biodata_id,
             nama: req.body.nama,
+            nik: req.body.nik,
             no_str: req.body.no_str,
             no_sip: req.body.no_sip,
             jenis_nakes_id: req.body.jenis_nakes_id,

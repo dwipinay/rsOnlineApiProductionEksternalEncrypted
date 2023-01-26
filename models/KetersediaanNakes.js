@@ -87,6 +87,7 @@ class KetersediaanAlkes {
             data.biodata_id,
             data.kode_rs,
             data.nama,
+            data.nik,
             data.no_str,
             data.no_sip,
             data.jenis_nakes_id,
@@ -97,7 +98,7 @@ class KetersediaanAlkes {
         ]
 
         const sqlInsert = 'INSERT INTO db_fasyankes.nakes_pekerjaan_dua ' +
-        '(id, biodata_id, kode_rs, nama, no_str, ' +
+        '(id, biodata_id, kode_rs, nama, nik, no_str, ' +
         'no_sip, jenis_nakes_id, jenis_nakes_nama, sub_kategori_nakes_id, ' +
         'sub_kategori_nakes_nama, is_active) ' +
         'VALUES ( ? )'
@@ -118,13 +119,14 @@ class KetersediaanAlkes {
 
     updateData(data, id, callback) {
         const database = new Database(pool)
-        const sql = 'UPDATE db_fasyankes.nakes_pekerjaan_dua SET nama=?, no_str=?, no_sip=?, ' +
+        const sql = 'UPDATE db_fasyankes.nakes_pekerjaan_dua SET nama=?, nik=?, no_str=?, no_sip=?, ' +
             'jenis_nakes_id=?, jenis_nakes_nama=?, sub_kategori_nakes_id=?,' +
             'sub_kategori_nakes_nama=?, is_active=? ' +
         'WHERE id = ?'
         const trans_id = parseInt(id)
         const sqlValue = [
             data.nama,
+            data.nik,
             data.no_str,
             data.no_sip,
             data.jenis_nakes_id,

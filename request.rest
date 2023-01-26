@@ -1,5 +1,5 @@
 ### Token Create
-POST http://127.0.0.1:3020/api/login
+POST http://202.70.136.24:3020/api/login
 Content-Type: application/json
 
 {
@@ -16,8 +16,8 @@ GET http://localhost:3020/api/rumahsakit/1108017
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImN1bWFkd2lwQGdtYWlsLmNvbSIsImlhdCI6MTYzNzI4ODkyMywiZXhwIjoxNjM3Mjg5NTIzfQ.iB_rfRHDek5LFH9O1IjlQyie23KeS4TZ0TAWRCt48P0
 
 ### Display all hospital resource
-GET http://127.0.0.1:3020/api/hospital
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uYW1lIjoia290YWtlbGVrdHJvbmlrQGdtYWlsLmNvbSIsImtvZGVfcnMiOm51bGwsImlhdCI6MTY3NDE5NzY1NiwiZXhwIjoxNjc0MTk4MjU2fQ.MEHOHxoYmMmWJka29HJAydza-nHo_hEL1R-KkFn1oCk
+GET http://202.70.136.24:3020/api/hospital
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uYW1lIjoia290YWtlbGVrdHJvbmlrQGdtYWlsLmNvbSIsImtvZGVfcnMiOm51bGwsImlhdCI6MTY3NDE5ODAyMCwiZXhwIjoxNjc0MTk4NjIwfQ.aQIckhB1U7TQEWyla3ble0H0GvosutRh2CPo-Y1iMGU
 
 ### Display Pelayanan
 GET http://127.0.0.1:3020/api/pelayanan
