@@ -1,5 +1,5 @@
 ### Token Create
-POST http://202.70.136.24:3020/api/login
+POST http://localhost:3020/api/login
 Content-Type: application/json
 
 {

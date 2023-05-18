@@ -1261,7 +1261,7 @@ class LaporanCovid19Versi3 {
         //     })
         // }
 
-        const endPoint = 'http://103.107.103.164/covid_api/api/sampel_feed/nik_yankes'
+        const endPoint = 'https://api-tc19.kemkes.go.id/covid_api/api/sampel_feed/nik_yankes'
         
         const config = {
             headers: {
