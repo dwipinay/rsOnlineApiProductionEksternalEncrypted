@@ -1298,7 +1298,7 @@ class LaporanCovid19Versi3 {
             }
         }
         const body = {
-            "labelsecret": "db_rsonline",
+            "labelsecret": "db_rsonline"
         }
         return new Promise((resolve, reject) => {
             axios.post(endPoint, body, config)

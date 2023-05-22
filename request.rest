@@ -1,11 +1,61 @@
 ### Token Create
-POST http://localhost:3020/api/login
+POST http://localhost:3020/api/rslogin
 Content-Type: application/json
 
 {
     "userName": "kotakelektronik@gmail.com",
     "password": "p5fuNGds"
 }
+
+### Laporan Covid
+POST http://127.0.0.1:3020/api/laporancovid19versi3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJrb3Rha2VsZWt0cm9uaWtAZ21haWwuY29tIiwia29kZV9ycyI6Ijk5OTk5OTkiLCJpYXQiOjE2ODQ3MzA0MjMsImV4cCI6MTY4NDczMTAyM30.lrPhLnYyLHAOleKO6JZBuBBiDj6OtHUTOPV6Bry1xwE
+Content-Type: application/json
+
+{
+    "kewarganegaraanId": "ID",
+    "nik": "7106090901570001",
+    "noPassport": null,
+    "asalPasienId": "0",
+    "noRM": "00709990",
+    "namaLengkapPasien": "Pasien Testing Bridging",
+    "namaInisialPasien": "PTB'",
+    "tanggalLahir": "1958-01-09",
+    "email": "-",
+    "noTelp": "081350099886",
+    "jenisKelaminId": "L",
+    "domisiliKecamatanId": "717109",
+    "domisiliKabKotaId": "7171",
+    "domisiliProvinsiId": "71",
+    "pekerjaanId": "1",
+    "tanggalMasuk": "2019-12-03",
+    "jenisPasienId": "3",
+    "varianCovidId": "1",
+    "statusPasienId": "1",
+    "statusCoInsidenId": "0",
+    "statusRawatId": "29",
+    "alatOksigenId": null,
+    "penyintasId": "0",
+    "tanggalOnsetGejala": "2022-02-09",
+    "kelompokGejalaId": "1",
+    "gejala": {
+        "demamId": "0",
+        "batukId": "0",
+        "pilekId": "0",
+        "sakitTenggorokanId": "0",
+        "sesakNapasId": "0",
+        "lemasId": "0",
+        "nyeriOtotId": "0",
+        "mualMuntahId": "0",
+        "diareId": "0",
+        "anosmiaId": "0",
+        "napasCepatId": "0",
+        "frekNapas30KaliPerMenitId": "0",
+        "distresPernapasanBeratId": "0",
+        "lainnyaId": "0"
+    }
+}
+
 
 ### Display all rumah sakit resource
 GET http://localhost:3020/api/rumahsakit?nama=si
@@ -22,3 +72,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uY
 ### Display Pelayanan
 GET http://127.0.0.1:3020/api/pelayanan
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uYW1lIjoia290YWtlbGVrdHJvbmlrQGdtYWlsLmNvbSIsImtvZGVfcnMiOm51bGwsImlhdCI6MTY3MjI5NDc1MSwiZXhwIjoxNjcyMjk1MzUxfQ.yu7_GYjzFyYLvOvdRGNuREEe15wqM3lu4lJlIEadEf8
+
+### User Insert
+POST http://127.0.0.1:3020/api/tasjil
+Content-Type: application/json
+
+{
+    "userName": "ujicoba@gmail.com",
+    "fullName": "ujicoba",
+    "appName": "ujicoba",
+    "stakeHolderName": "ujicoba",
+    "ipAddress": "1",
+    "activatedDate": "2023-01-01 00:00:00",
+    "expiredDate": "2023-01-31 00:00:00",
+    "isActive": "1",
+    "faskesId": null
+}
