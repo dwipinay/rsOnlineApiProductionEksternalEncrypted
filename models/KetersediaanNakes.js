@@ -155,6 +155,35 @@ class KetersediaanAlkes {
             callback(error, null)
         })
     }
+
+    softDeleteData(id, callback) {
+        const database = new Database(pool)
+        const sql = 'UPDATE db_fasyankes.nakes_pekerjaan_dua SET is_active=0 ' +
+        'WHERE id = ?'
+        const trans_id = parseInt(id)
+        const sqlValue = [
+            trans_id
+        ]
+        
+        database.query(sql, sqlValue)
+        .then(
+            (res) => {
+                if (res.affectedRows === 0 && res.changedRows === 0) {
+                    callback(null, 'row not matched');
+                    return
+                }
+                let resourceUpdated = {
+                    id: trans_id
+                } 
+                callback(null, resourceUpdated);
+            },(error) => {
+                throw error
+            }
+        ).catch((error) => {
+            callback(error, null)
+        })
+    }
+
 }
 
 module.exports = KetersediaanAlkes

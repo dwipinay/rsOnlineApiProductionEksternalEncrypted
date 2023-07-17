@@ -163,6 +163,9 @@ router.post('/api/ketersediaannakes',
 router.patch('/api/ketersediaannakes/:id', 
     userTokenObject.authenticateToken,
     KetersediaanNakesControllerObject.update)
+router.delete('/api/ketersediaannakes/:id', 
+    userTokenObject.authenticateToken,
+    KetersediaanNakesControllerObject.delete)
 
 // Ketersediaan Alkes
 router.get('/api/ketersediaanalkes', 
