@@ -8,10 +8,15 @@ const apiDoc2022111715 = require('../documentations/apiDoc2022111715.json')
 const apiDocNakes = require('../documentations/apiDocNakes.json')
 const apiDocRSOnlineRS = require('../documentations/apiDocRSOnlineRS.json')
 const apiDoc2022122910 = require('../documentations/apiDoc2022122910.json')
-
+const apiDocDinkesSurakarta1 = require('../documentations/apiDocsDinkesSurakarta-1.json')
 
 router.use('/apidoc2022021621', swaggerUi.serve, (req, res) => {
     let html = swaggerUi.generateHTML(apiDoc2022021621);
+    res.send(html);
+})
+
+router.use('/apiDocsDinkesSurakarta-1', swaggerUi.serve, (req, res) => {
+    let html = swaggerUi.generateHTML(apiDocDinkesSurakarta1);
     res.send(html);
 })
 

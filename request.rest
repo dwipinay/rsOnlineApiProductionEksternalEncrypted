@@ -1,11 +1,12 @@
 ### Token Create
-POST http://localhost:3020/api/login
+POST http://127.0.0.1:3020/api/login
 Content-Type: application/json
 
 {
     "userName": "kotakelektronik@gmail.com",
     "password": "p5fuNGds"
 }
+
 
 ### Laporan Covid
 POST http://202.70.136.24:3020/api/laporancovid19versi3
@@ -58,7 +59,7 @@ Content-Type: application/json
 
 ### Display all rumah sakit resource
 GET http://localhost:3020/api/rumahsakit?provinsiId=31&kabKotaId=3173
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uYW1lIjoia290YWtlbGVrdHJvbmlrQGdtYWlsLmNvbSIsImtvZGVfcnMiOm51bGwsImlhdCI6MTY5MDk1Njg5MCwiZXhwIjoxNjkwOTU3NDkwfQ.jlh4iRCaL6zEVVKXPeGtpneW76TFL_ZT5xaI9I5XOXw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uYW1lIjoia290YWtlbGVrdHJvbmlrQGdtYWlsLmNvbSIsImtvZGVfcnMiOm51bGwsImlhdCI6MTY5MDk1NzUyMSwiZXhwIjoxNjkwOTU4MTIxfQ.eJPLFHusLQsSCl3dphsb5zu9UksuVg9xiHqraK1d4OY
 
 ### Display the specific rumah sakit resource
 GET http://localhost:3020/api/rumahsakit/1108017
