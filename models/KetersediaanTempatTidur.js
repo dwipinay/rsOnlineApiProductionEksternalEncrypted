@@ -40,7 +40,7 @@ class KetersediaanTempatTidur {
                 const provinsiId = req.query.provinsiId || null
                 const kabKotaId = req.query.kabKotaId || null
                 const idTt = req.query.id_tt || null
-                const tglUpdate = req.query.tglUpdate || null
+                const tglUpdate = req.query.tanggalUpdate || null
                 const rsId = req.query.rsId || null
 
                 if (provinsiId != null) {
