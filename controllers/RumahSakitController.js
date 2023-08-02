@@ -1,8 +1,29 @@
 const rumahSakit = require('../models/RumahSakit')
 const pagination = require('../configs/Pagination')
+const Joi = require('joi')
 
 class RumahSakitController {
     index(req, res) {
+        const schema = Joi.object({
+            provinsiId: Joi.string().allow(''),
+            kabKotaId: Joi.string().allow('').allow(null),
+            nama: Joi.string().allow(''),
+            pelayanan: Joi.string().allow(''),
+            aktive: Joi.number(),
+            page: Joi.number(),
+            limit: Joi.number()
+        })
+    
+        const { error, value } =  schema.validate(req.query)
+    
+        if (error) {
+            res.status(400).send({
+                status: false,
+                message: error.details[0].message
+            })
+            return
+        }
+
         const rumahSakitObject = new rumahSakit()
         rumahSakitObject.getAll(req, (err, results) => {
             if (err) {
