@@ -23,55 +23,112 @@ class RumahSakit {
                     'db_fasyankes.`data`.RUMAH_SAKIT AS nama, ' +
                     'db_fasyankes.m_jenis.alias AS jenis, ' +
                     'db_fasyankes.m_kelas.kelas AS kelas, ' +
-                    'db_fasyankes.m_kepemilikan.kepemilikan AS kepemilikan, ' +
-                    'db_fasyankes.`data`.DIREKTUR_RS AS direktur, ' +
-                    'db_fasyankes.`data`.alamat, ' +
-                    'db_fasyankes.`kab/kota`.`KAB/KOTA` AS kab_kota, ' +
-                    'db_fasyankes.propinsi.propinsi_name AS propinsi, ' +
                     'db_fasyankes.`data`.TELEPON AS telepon, ' +
+                    'db_fasyankes.`data`.WEBSITE AS website, ' +
+                    'db_fasyankes.`m_blu`.blu AS statusBLU, ' +
+                    'db_fasyankes.`data`.NO_SURAT_IJIN AS noSuratIjinOperasional, ' +
+                    'db_fasyankes.`data`.TANGGAL_SURAT_IJIN AS tanggalSuratIjinOperasional, ' +
+                    'db_fasyankes.`data`.DIREKTUR_RS AS direktur, ' +
+                    'db_fasyankes.m_simrs.simrs AS ketersediaanSIMRS, ' +
+                    'db_fasyankes.`data`.LUAS_TANAH AS luasTanah, ' +
+                    'db_fasyankes.`data`.LUAS_BANGUNAN AS luasBangunan, ' +
+                    'db_fasyankes.m_kepemilikan.kepemilikan AS kepemilikan, ' +
                     'db_fasyankes.m_blu.blu as statusBLU, ' +
-                    'db_fasyankes.koordinat.long, ' +
-                    'db_fasyankes.koordinat.alt '
+                    'db_fasyankes.t_dok_tariflayanan_rs.url as urlTarif, ' +
+                    'db_fasyankes.t_dok_tariflayanan_rs.status_validasi as statusValidasiTarif, ' +
+                    'db_fasyankes.`data`.ALAMAT AS alamat, ' +
+                    'db_fasyankes.`data`.provinsi_id, ' +
+                    'db_fasyankes.provinsi.nama as provinsiNama, ' +
+                    'db_fasyankes.`data`.kab_kota_id, ' +
+                    'db_fasyankes.kab_kota.nama as kabKotaNama, ' +
+                    'db_fasyankes.koordinat.long as longitude, ' +
+                    'db_fasyankes.koordinat.alt as latitude, ' +
+                    'db_fasyankes.`data`.aktive as statusAktivasi, ' +
+                    'derivedtable2.url as urlFotoDepan, ' +
+                    'db_fasyankes.`data`.TANGGAL_UPDATE as modified_at '
 
-                const sqlFrom = 'FROM db_fasyankes.`data` INNER JOIN db_fasyankes.propinsi ' +
-                    'ON db_fasyankes.propinsi.propinsi_kode = db_fasyankes.`data`.usrpwd2 ' +
-                    'INNER JOIN db_fasyankes.`kab/kota` ' +
-                    'ON db_fasyankes.`kab/kota`.link = db_fasyankes.`data`.link ' +
-                    'INNER JOIN db_fasyankes.m_jenis ' +
+                    const sqlFrom = 'FROM ' +
+                    '(SELECT ' +
+                    'db_fasyankes.`data`.Propinsi as faskesId ' +
+                    'FROM ' +
+                        'db_fasyankes.`data` ' +
+                        'INNER JOIN db_fasyankes.t_pelayanan ON db_fasyankes.t_pelayanan.koders = db_fasyankes.`data`.Propinsi ' +
+                        'INNER JOIN db_fasyankes.m_pelayanan ON db_fasyankes.m_pelayanan.kode_pelayanan = db_fasyankes.t_pelayanan.kode_pelayanan ' +
+                    'WHERE ' +
+                        'db_fasyankes.m_pelayanan.pelayanan LIKE ? ' +
+                    'GROUP BY db_fasyankes.`data`.Propinsi) derivedTable1 ' +
+                    'INNER JOIN db_fasyankes.`data` ON db_fasyankes.`data`.Propinsi = derivedTable1.faskesId ' +
+                    'LEFT OUTER JOIN db_fasyankes.provinsi ON db_fasyankes.provinsi.id = db_fasyankes.`data`.provinsi_id ' +
+                    'LEFT OUTER JOIN db_fasyankes.kab_kota ON db_fasyankes.kab_kota.id = db_fasyankes.`data`.kab_kota_id ' +
+                    'LEFT OUTER JOIN db_fasyankes.m_jenis ' +
                     'ON db_fasyankes.m_jenis.id_jenis = db_fasyankes.`data`.JENIS ' +
-                    'INNER JOIN db_fasyankes.m_kelas ' +
+                    'LEFT OUTER JOIN db_fasyankes.m_kelas ' +
                     'ON db_fasyankes.m_kelas.id_kelas = db_fasyankes.`data`.KLS_RS ' +
-                    'INNER JOIN db_fasyankes.m_kepemilikan ' +
+                    'LEFT OUTER JOIN db_fasyankes.m_kepemilikan ' +
                     'ON db_fasyankes.m_kepemilikan.id_kepemilikan = db_fasyankes.`data`.PENYELENGGARA ' +
-                    'INNER JOIN db_fasyankes.m_blu ' +
-                    'ON db_fasyankes.m_blu.id_blu = db_fasyankes.`data`.blu ' + 
-                    'INNER JOIN db_fasyankes.koordinat ' +
-                    'ON db_fasyankes.`data`.propinsi = db_fasyankes.koordinat.koders '
+                    'LEFT OUTER JOIN db_fasyankes.m_blu ON db_fasyankes.m_blu.id_blu = db_fasyankes.`data`.blu  ' +
+                    'LEFT OUTER JOIN db_fasyankes.koordinat ON db_fasyankes.koordinat.koders = db_fasyankes.`data`.propinsi ' +
+                    'LEFT OUTER JOIN db_fasyankes.m_simrs ON db_fasyankes.m_simrs.id_simrs = db_fasyankes.`data`.simrs ' +
+                    'LEFT OUTER JOIN db_fasyankes.t_dok_tariflayanan_rs on db_fasyankes.t_dok_tariflayanan_rs.koders = db_fasyankes.`data`.Propinsi ' +
+                    'LEFT OUTER JOIN ( ' +
+                        'SELECT db_fasyankes.t_images.koders, db_fasyankes.t_images.url ' +
+                        'FROM db_fasyankes.t_images ' +
+                        'WHERE db_fasyankes.t_images.keterangan = "depan" ' +
+                    ') derivedtable2 ON derivedtable2.koders = db_fasyankes.`data`.Propinsi '
 
-                const sqlOrder = 'ORDER BY db_fasyankes.propinsi.propinsi_kode, db_fasyankes.`kab/kota`.link'
+                const sqlOrder = ' ORDER BY db_fasyankes.`data`.RUMAH_SAKIT ' 
 
                 const sqlWhere = 'WHERE '
 
                 const filter = []
+                const sqlFilterValue = []
 
+                const pelayananNama = req.query.pelayanan || ""
+                const provinsiId = req.query.provinsiId || null
+                const kabKotaId = req.query.kabKotaId || null
                 const nama = req.query.nama || null
+                const aktive = req.query.aktive || null
+
+                if (pelayananNama != null) {
+                    sqlFilterValue.push('%'.concat(pelayananNama).concat('%'))
+                }
+
+                if (provinsiId != null) {
+                    filter.push("db_fasyankes.`data`.provinsi_id = ?")
+                    sqlFilterValue.push(provinsiId)
+                }
+
+                if (kabKotaId != null) {
+                    filter.push("db_fasyankes.`data`.kab_kota_id = ?")
+                    sqlFilterValue.push(kabKotaId)
+                }
 
                 if (nama != null) {
                     filter.push("db_fasyankes.`data`.RUMAH_SAKIT like ?")
+                    sqlFilterValue.push('%'.concat(nama).concat('%'))
+                }
+
+                if (aktive != null) {
+                    filter.push("db_fasyankes.`data`.aktive = ?")
+                    sqlFilterValue.push(aktive)
                 }
 
                 let sqlFilter = ''
-                filter.forEach((value, index) => {
-                    if (index == 0) {
-                        sqlFilter = sqlWhere.concat(value)
-                    } else if (index > 0) {
-                        sqlFilter = sqlFilter.concat(' and ').concat(value)
-                    }
-                })
+                if (filter.length == 0) {
+                    sqlFilter = 'WHERE db_fasyankes.`data`.Propinsi NOT IN ("9999999","7371435","7371121","") AND db_fasyankes.`data`.JENIS <> 20 '
+                } else {
+                    filter.forEach((value, index) => {
+                        if (index == 0) {
+                            sqlFilter = sqlWhere.concat(value)
+                        } else if (index > 0) {
+                            sqlFilter = sqlFilter.concat(' and ').concat(value)
+                        }
+                    })
+                }
 
                 const sql = sqlSelect.concat(sqlFrom).concat(sqlFilter).concat(sqlOrder)
                 
-                database.query(sql, ['%' + nama + '%'])
+                database.query(sql, sqlFilterValue)
                 .then(
                     (res) => {
                         callback(null, res)

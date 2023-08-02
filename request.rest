@@ -57,8 +57,8 @@ Content-Type: application/json
 }
 
 ### Display all rumah sakit resource
-GET http://localhost:3020/api/rumahsakit?nama=si
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uYW1lIjoia290YWtlbGVrdHJvbmlrQGdtYWlsLmNvbSIsImtvZGVfcnMiOm51bGwsImlhdCI6MTY3NDE5NzQ4NiwiZXhwIjoxNjc0MTk4MDg2fQ.M7K5Z0N6aMR0RBELFRj2o3tkqmsQGtOMquMOAl7z9ss
+GET http://localhost:3020/api/rumahsakit?provinsiId=31&kabKotaId=3173
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcl9uYW1lIjoia290YWtlbGVrdHJvbmlrQGdtYWlsLmNvbSIsImtvZGVfcnMiOm51bGwsImlhdCI6MTY5MDk1Njg5MCwiZXhwIjoxNjkwOTU3NDkwfQ.jlh4iRCaL6zEVVKXPeGtpneW76TFL_ZT5xaI9I5XOXw
 
 ### Display the specific rumah sakit resource
 GET http://localhost:3020/api/rumahsakit/1108017
