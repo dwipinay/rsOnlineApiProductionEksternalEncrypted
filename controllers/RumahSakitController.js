@@ -35,7 +35,7 @@ class RumahSakitController {
             }
             
             const page = parseInt(req.query.page) || 1
-            const limit = parseInt(req.query.limit) > 1000 ? 1000 : parseInt(req.query.limit) || 1000
+            const limit = parseInt(req.query.limit) > 100 ? 100 : parseInt(req.query.limit) || 1000
             const paginationObject = new pagination(results, page, limit)
             const remarkPagination = paginationObject.getRemarkPagination()
             const dataPagination = paginationObject.getDataPagination()
