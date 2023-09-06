@@ -7,7 +7,7 @@ class KetersediaanTempatTidurController {
         const schema = Joi.object({
             provinsiId: Joi.number().required(),
             kabKotaId: Joi.number(),
-            kodeRS: Joi.string(),
+            rsId: Joi.string(),
             page: Joi.number(),
             limit: Joi.number(),
             tanggalUpdate: Joi.string()
