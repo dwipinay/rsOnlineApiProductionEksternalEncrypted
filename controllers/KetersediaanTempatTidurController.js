@@ -6,7 +6,7 @@ class KetersediaanTempatTidurController {
     index(req, res) {
         const schema = Joi.object({
             provinsiId: Joi.number().required(),
-            kabKotaId: Joi.number().required(),
+            kabKotaId: Joi.number(),
             page: Joi.number(),
             limit: Joi.number(),
             tanggalUpdate: Joi.string()
