@@ -5,7 +5,7 @@ const Joi = require('joi')
 class KetersediaanTempatTidurController {
     index(req, res) {
         const schema = Joi.object({
-            provinsiId: Joi.number().required(),
+            provinsiId: Joi.number(),
             kabKotaId: Joi.number(),
             rsId: Joi.string(),
             page: Joi.number(),
